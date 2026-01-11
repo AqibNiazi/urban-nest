@@ -1,6 +1,9 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "@/layout/AppLayout";
+import Home from "@/pages/Home";
+import About from "@/pages/About";
+import SignIn from "@/pages/SignIn";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -12,18 +15,14 @@ const AppRoutes = () => {
           index: true,
           element: <Home />,
         },
-        // {
-        //   path: "login",
-        //   element: <Login />,
-        // },
-        // {
-        //   path: "email-verify",
-        //   element: <EmailVerify />,
-        // },
-        // {
-        //   path: "reset-password",
-        //   element: <ResetPassword />,
-        // },
+        {
+          path: "about",
+          element: <About />,
+        },
+        {
+          path: "sign-in",
+          element: <SignIn />,
+        },
       ],
     },
   ]);
