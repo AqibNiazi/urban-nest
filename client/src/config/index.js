@@ -1,6 +1,7 @@
 import axios from "axios";
 //  Local
-const websiteBaseURL = "http://localhost:3000";
+const websiteBaseURL = import.meta.env.VITE_WEBSITE_BASE_URL;
+// const serverBaseURL = import.meta.env.VITE_SERVER_BASE_URL;
 
 // Production
 // const websiteBaseURL = "https://mern-auth-5aqq.vercel.app";
@@ -17,6 +18,7 @@ const clientEndPoints = {
 
   signup: `${authBasePath}/signup`,
   signin: `${authBasePath}/signin`,
+  google: `${authBasePath}/google`,
   logout: `${authBasePath}/logout`,
   sendVerificationOTP: `${authBasePath}/send-verify-otp`,
   verifyAccount: `${authBasePath}/verify-account`,

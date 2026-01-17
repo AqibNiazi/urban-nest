@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁️ eye icons
+import OAuth from "@/components/OAuth";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -146,6 +147,7 @@ const SignUp = () => {
             >
               {loading ? "Loading..." : "Sign Up"}
             </button>
+            <OAuth />
 
             {/* Login link */}
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">

@@ -9,6 +9,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "@/store/user/userSlice";
+import OAuth from "@/components/OAuth";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const SignIn = () => {
       dispatch(signInStart());
       const response = await clientBaseURL.post(
         clientEndPoints.signin,
-        formData
+        formData,
       );
 
       if (response.data.success) {
@@ -52,8 +53,6 @@ const SignIn = () => {
       dispatch(signInFailure(err.response?.data?.message));
 
       toast.error(err.response?.data?.message || "Signin failed");
-    } finally {
-      dispatch(signInStart());
     }
   };
 
@@ -129,6 +128,7 @@ const SignIn = () => {
             >
               {loading ? "Loading..." : "Sign In"}
             </button>
+            <OAuth />
 
             {/* Login link */}
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
