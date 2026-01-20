@@ -19,15 +19,15 @@ const clientEndPoints = {
   signup: `${authBasePath}/signup`,
   signin: `${authBasePath}/signin`,
   google: `${authBasePath}/google`,
-  logout: `${authBasePath}/logout`,
-  sendVerificationOTP: `${authBasePath}/send-verify-otp`,
-  verifyAccount: `${authBasePath}/verify-account`,
-  isAuthenticated: `${authBasePath}/is-auth`,
-  sendResetOTP: `${authBasePath}/send-reset-otp`,
-  resetPassword: `${authBasePath}/reset-password`,
+  // logout: `${authBasePath}/logout`,
+  // sendVerificationOTP: `${authBasePath}/send-verify-otp`,
+  // verifyAccount: `${authBasePath}/verify-account`,
+  // isAuthenticated: `${authBasePath}/is-auth`,
+  // sendResetOTP: `${authBasePath}/send-reset-otp`,
+  // resetPassword: `${authBasePath}/reset-password`,
 
   ////////////////User Routes////////////
-  userData: `${userBasePath}/data`,
+  uploadAvatar: `${userBasePath}/upload-avatar`,
 };
 
 export { clientBaseURL, clientEndPoints };
