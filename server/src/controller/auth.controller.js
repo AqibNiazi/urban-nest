@@ -182,6 +182,12 @@ const google = async (req, res) => {
     let user = await User.findOne({ email });
 
     if (user) {
+      // Update avatar if Google provides a new one
+      if (photo && user.avatar !== photo) {
+        user.avatar = photo;
+        await user.save();
+      }
+
       // ✅ Existing user → generate token
       const token = jwt.sign(
         { id: user._id, email: user.email },
