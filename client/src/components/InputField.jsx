@@ -7,6 +7,7 @@ const InputField = ({
   name,
   id,
   value,
+  defaultValue,
   onChange,
   placeholder,
 }) => {
@@ -23,6 +24,7 @@ const InputField = ({
         name={name}
         id={id}
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
         placeholder={placeholder}
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 

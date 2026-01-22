@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁️ eye icons
-const PasswordField = ({ labelfor, labeltext, name, id, value, onChange }) => {
+const PasswordField = ({
+  labelfor,
+  labeltext,
+  name,
+  id,
+  value,
+  onChange,
+  required,
+}) => {
   const [showPassword, setShowPassword] = useState(false); // 👁️ toggle state
   return (
     <div className="relative mb-4">
@@ -21,7 +29,7 @@ const PasswordField = ({ labelfor, labeltext, name, id, value, onChange }) => {
                     focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 
                     dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                     dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required
+        required={required}
       />
       <span
         onClick={() => setShowPassword(!showPassword)}
