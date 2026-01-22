@@ -16,6 +16,6 @@ userRouter.post(
   uploadProfileImage,
 );
 
-userRouter.post("/update-user/:id", verifyToken, updateUserInfo);
+userRouter.put("/update-user/:id", verifyToken, updateUserInfo);
 
 module.exports = userRouter;
