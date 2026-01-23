@@ -269,8 +269,20 @@ const google = async (req, res) => {
   }
 };
 
+const signout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res
+      .status(200)
+      .json({ message: "User has been logged out!", success: true });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   signup,
   signin,
   google,
+  signout,
 };
