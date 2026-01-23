@@ -29,6 +29,7 @@ const clientEndPoints = {
   ////////////////User Routes////////////
   uploadAvatar: `${userBasePath}/upload-avatar`,
   updateUser: `${userBasePath}/update-user`,
+  deleteUser: `${userBasePath}/delete-user`,
 };
 
 export { clientBaseURL, clientEndPoints };

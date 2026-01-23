@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { signInSuccess } from "@/store/user/userSlice";
+import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  signInSuccess,
+} from "@/store/user/userSlice";
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
 import PasswordField from "@/components/PasswordField";
@@ -20,6 +25,7 @@ const Profile = () => {
   const [progress, setProgress] = useState(0); // ✅ track percentage
   const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({});
+  console.log(currentUser?.avatar);
 
   const handleUploadFile = async (file) => {
     if (!file) return;
@@ -41,7 +47,7 @@ const Profile = () => {
       const formData = new FormData();
       formData.append("avatar", file);
 
-      const response = await clientBaseURL.put(
+      const response = await clientBaseURL.post(
         clientEndPoints.uploadAvatar,
         formData,
         {
@@ -108,6 +114,26 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const response = await clientBaseURL.delete(
+        `${clientEndPoints.deleteUser}/${currentUser.id}`,
+      );
+
+      if (response.data.success) {
+        dispatch(deleteUserSuccess());
+        notify.success(response.data.message);
+      } else {
+        dispatch(deleteUserFailure(response.data.message));
+        notify.error(response.data.message);
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+      notify.error(error.response?.data?.message || "Delete failed");
+    }
+  };
+
   return (
     <div className="flex flex-col max-w-lg justify-center items-center mx-auto py-7">
       <h1 className="font-semibold text-3xl text-center mb-4">Profile</h1>
@@ -120,7 +146,7 @@ const Profile = () => {
           onChange={(e) => setFile(e.target.files[0])}
         />
         <img
-          src={currentUser.avatar}
+          src={currentUser?.avatar}
           alt="Profile"
           className="rounded-full w-24 h-24 mx-auto cursor-pointer"
           onClick={() => fileInputRef.current.click()}
@@ -161,7 +187,12 @@ const Profile = () => {
         />
         <Button>{loading ? "Loading..." : "Update"}</Button>
         <div className="flex justify-between">
-          <span className="text-red-700 cursor-pointer">Delete Account</span>
+          <span
+            className="text-red-700 cursor-pointer"
+            onClick={handleDeleteUser}
+          >
+            Delete Account
+          </span>
           <span className="text-red-700 cursor-pointer">Sign Out</span>
         </div>
       </form>
