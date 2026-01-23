@@ -152,4 +152,29 @@ const updateUserInfo = async (req, res) => {
   }
 };
 
-module.exports = { uploadProfileImage, updateUserInfo };
+const deleteUserAccount = async (req, res) => {
+  if (req.user.id !== req.params.id) {
+    return res.status(401).json({
+      success: false,
+      message: "You can only delete your own account",
+    });
+  }
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.clearCookie("token");
+    return res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete User Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while deleting the user.",
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
+module.exports = { uploadProfileImage, updateUserInfo, deleteUserAccount };
