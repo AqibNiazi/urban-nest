@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 const cookieParser = require("cookie-parser");
 const userRouter = require("./src/router/user.router");
 const authRouter = require("./src/router/auth.router");
+const listingRouter = require("./src/router/listing.router");
 const allowedOrigins = [
   "http://localhost:5173",
   // "https://mern-auth-plum.vercel.app/",
@@ -19,7 +20,7 @@ app.use(
   cors({
     origin: allowedOrigins,
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(cookieParser());
@@ -27,6 +28,7 @@ app.use(cookieParser());
 // API Endpoints
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/listing", listingRouter);
 const NodeJsServer = async () => {
   try {
     await database();
