@@ -1,12 +1,9 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "@/layout/AppLayout";
-import Home from "@/pages/Home";
-import About from "@/pages/About";
-import SignIn from "@/pages/SignIn";
-import SignUp from "@/pages/SignUp";
-import Profile from "@/pages/Profile";
-import PrivateRoute from "@/components/PrivateRoute";
+import { Home, About, SignIn, SignUp, Profile, CreateListing } from "@/pages";
+import { PrivateRoute } from "@/components";
+
 const AppRoutes = () => {
   const router = createBrowserRouter([
     {
@@ -32,7 +29,10 @@ const AppRoutes = () => {
         // Protected routes
         {
           element: <PrivateRoute />,
-          children: [{ path: "profile", element: <Profile /> }],
+          children: [
+            { path: "profile", element: <Profile /> },
+            { path: "create-listing", element: <CreateListing /> },
+          ],
         },
       ],
     },

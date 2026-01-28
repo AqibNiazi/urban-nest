@@ -30,7 +30,7 @@ const Profile = () => {
   const [progress, setProgress] = useState(0); // ✅ track percentage
   const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({});
-  console.log("current user Id", currentUser.id);
+
 
   const handleUploadFile = async (file) => {
     if (!file) return;
@@ -85,148 +85,163 @@ const Profile = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      dispatch(updateUserStart());
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      const filteredData = Object.fromEntries(
-        Object.entries(formData).filter(
-          ([_, value]) => value !== "" && value !== undefined,
-        ),
-      );
-
-      if (Object.keys(filteredData).length === 0) {
-        notify.info("No changes to update");
-        return;
-      }
-
-      const response = await clientBaseURL.put(
-        `${clientEndPoints.updateUser}/${currentUser.id}`,
-        filteredData,
-      );
-
-      if (response.data.success) {
-        dispatch(updateUserSuccess(response.data.data));
-        notify.success(response.data.message);
-      } else {
-        dispatch(updateUserFailure(response.data.message));
-        notify.error(response.data.message);
-      }
-    } catch (error) {
-      dispatch(updateUserFailure(error.message));
-      notify.error(error.response?.data?.message || "Update failed");
-    }
-  };
-
-  const handleDeleteUser = async () => {
-    try {
-      dispatch(deleteUserStart());
-      const response = await clientBaseURL.delete(
-        `${clientEndPoints.deleteUser}/${currentUser.id}`,
-      );
-
-      if (response.data.success) {
-        dispatch(deleteUserSuccess());
-        notify.success(response.data.message);
-        navigate("/sign-in");
-      } else {
-        dispatch(deleteUserFailure(response.data.message));
-        notify.error(response.data.message);
-      }
-    } catch (error) {
-      dispatch(deleteUserFailure(error.message));
-      notify.error(error.response?.data?.message || "Delete failed");
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      dispatch(signoutUserStart());
-
-      const response = await clientBaseURL.get(clientEndPoints.signout);
-      console.log("signout response", response);
-
-      if (response.data.success) {
-        dispatch(signoutUserSuccess());
-        notify.success(response.data.message);
-        navigate("/sign-in");
-      } else {
-        dispatch(signoutUserFailure(response.data.message));
-        notify.error(response.data.message);
-      }
-    } catch (error) {
-      dispatch(signoutUserFailure(error.message));
-      notify.error(error.response?.data?.message || "Signout failed");
-    }
-  };
-
-  return (
-    <div className="flex flex-col max-w-lg justify-center items-center mx-auto py-7">
-      <h1 className="font-semibold text-3xl text-center mb-4">Profile</h1>
-      <form className="w-full space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-        <input
-          type="file"
-          ref={fileInputRef}
-          hidden
-          accept="image/*"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
-        <img
-          src={currentUser?.avatar}
-          alt="Profile"
-          className="rounded-full w-24 h-24 mx-auto cursor-pointer"
-          onClick={() => fileInputRef.current.click()}
-        />
-        {uploading && (
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-            <div
-              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-        )}
-
-        <InputField
-          labeltext="Username"
-          labelfor="username"
-          type="text"
-          name="username"
-          id="username"
-          defaultValue={currentUser.username}
-          onChange={handleChange}
-        />
-        <InputField
-          labeltext="Email"
-          labelfor="email"
-          type="email"
-          name="email"
-          id="email"
-          defaultValue={currentUser.email}
-          onChange={handleChange}
-        />
-        <PasswordField
-          labelfor="password"
-          labeltext="Password"
-          name="password"
-          id="password"
-          onChange={handleChange}
-        />
-        <Button>{loading ? "Loading..." : "Update"}</Button>
-        <div className="flex justify-between">
-          <span
-            className="text-red-700 cursor-pointer"
-            onClick={handleDeleteUser}
-          >
-            Delete Account
-          </span>
-          <span className="text-red-700 cursor-pointer" onClick={handleSignOut}>
-            Sign Out
-          </span>
-        </div>
-      </form>
-    </div>
+  const filteredData = Object.fromEntries(
+    Object.entries(formData).filter(
+      ([_, value]) => value !== "" && value !== undefined,
+    ),
   );
+
+  if (Object.keys(filteredData).length === 0) {
+    notify.info("No changes to update");
+    // ✅ Reset loading state
+    dispatch(updateUserFailure("No changes"));
+    return;
+  }
+
+  try {
+    dispatch(updateUserStart());
+
+    const response = await clientBaseURL.put(
+      `${clientEndPoints.updateUser}/${currentUser.id}`,
+      filteredData,
+    );
+
+    if (response.data.success) {
+      dispatch(updateUserSuccess(response.data.data));
+      notify.success(response.data.message);
+    } else {
+      dispatch(updateUserFailure(response.data.message));
+      notify.error(response.data.message);
+    }
+  } catch (error) {
+    dispatch(updateUserFailure(error.message));
+    notify.error(error.response?.data?.message || "Update failed");
+  }
+};
+const handleDeleteUser = async () => {
+  try {
+    dispatch(deleteUserStart());
+    const response = await clientBaseURL.delete(
+      `${clientEndPoints.deleteUser}/${currentUser.id}`,
+    );
+
+    if (response.data.success) {
+      dispatch(deleteUserSuccess());
+      notify.success(response.data.message);
+      navigate("/sign-in");
+    } else {
+      dispatch(deleteUserFailure(response.data.message));
+      notify.error(response.data.message);
+    }
+  } catch (error) {
+    dispatch(deleteUserFailure(error.message));
+    notify.error(error.response?.data?.message || "Delete failed");
+  }
+};
+
+const handleSignOut = async () => {
+  try {
+    dispatch(signoutUserStart());
+
+    const response = await clientBaseURL.get(clientEndPoints.signout);
+    console.log("signout response", response);
+
+    if (response.data.success) {
+      dispatch(signoutUserSuccess());
+      notify.success(response.data.message);
+      navigate("/sign-in");
+    } else {
+      dispatch(signoutUserFailure(response.data.message));
+      notify.error(response.data.message);
+    }
+  } catch (error) {
+    dispatch(signoutUserFailure(error.message));
+    notify.error(error.response?.data?.message || "Signout failed");
+  }
+};
+
+return (
+  <div className="flex flex-col max-w-lg justify-center items-center mx-auto py-7">
+    <h1 className="font-semibold text-3xl text-center mb-4">Profile</h1>
+    <form className="w-full space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+      <input
+        type="file"
+        ref={fileInputRef}
+        hidden
+        accept="image/*"
+        onChange={(e) => setFile(e.target.files[0])}
+      />
+      <img
+        src={currentUser?.avatar}
+        alt="Profile"
+        className="rounded-full w-24 h-24 mx-auto cursor-pointer"
+        onClick={() => fileInputRef.current.click()}
+      />
+      {uploading && (
+        <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+          <div
+            className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      )}
+
+      <InputField
+        labeltext="Username"
+        labelfor="username"
+        type="text"
+        name="username"
+        id="username"
+        defaultValue={currentUser.username}
+        onChange={handleChange}
+      />
+      <InputField
+        labeltext="Email"
+        labelfor="email"
+        type="email"
+        name="email"
+        id="email"
+        defaultValue={currentUser.email}
+        onChange={handleChange}
+      />
+      <PasswordField
+        labelfor="password"
+        labeltext="Password"
+        name="password"
+        id="password"
+        onChange={handleChange}
+      />
+      <Button
+        type="submit"
+        className="bg-blue-600 hover:bg-blue-700"
+        loading={loading}
+      >
+        {loading ? "Loading..." : "Update"}
+      </Button>
+      <Button
+        type="button"
+        className="bg-green-600 hover:bg-green-700"
+        onClick={() => navigate("/create-listing")}
+      >
+        Create Listing
+      </Button>
+      <div className="flex justify-between">
+        <span
+          className="text-red-700 cursor-pointer"
+          onClick={handleDeleteUser}
+        >
+          Delete Account
+        </span>
+        <span className="text-red-700 cursor-pointer" onClick={handleSignOut}>
+          Sign Out
+        </span>
+      </div>
+    </form>
+  </div>
+);
 };
 
 export default Profile;

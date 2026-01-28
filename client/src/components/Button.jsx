@@ -1,14 +1,13 @@
 import React from "react";
 
-const Button = ({ loading, children }) => {
+const Button = ({ loading, type, children, className, onClick }) => {
   return (
     <button
-      type="submit"
+      type={type}
+      onClick={onClick}
       disabled={loading}
-      className="w-full cursor-pointer text-white bg-blue-600 hover:bg-blue-700 
-                focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg 
-                text-md px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 
-                dark:focus:ring-blue-800"
+      className={`w-full cursor-pointer font-medium rounded-lg  text-md px-5 py-2.5 text-center text-white
+                focus:ring-4 focus:outline-none focus:ring-blue-300 ${className}`}
     >
       {children}
     </button>
