@@ -1,7 +1,7 @@
 const cloudinary = require("../config/cloudinary");
 const User = require("../model/user.model");
 const bcrypt = require("bcryptjs");
-
+const Listing = require("../model/listing.model");
 const uploadProfileImage = async (req, res) => {
   try {
     if (!req.file) {
@@ -176,4 +176,39 @@ const deleteUserAccount = async (req, res) => {
   }
 };
 
-module.exports = { uploadProfileImage, updateUserInfo, deleteUserAccount };
+const getUserListing = async (req, res) => {
+  try {
+    // ✅ Ensure user can only view their own listings
+    if (req.user.id !== req.params.id) {
+      return res.status(401).json({
+        success: false,
+        error: "UNAUTHORIZED",
+        message: "You can only view your own listings!",
+      });
+    }
+
+    // ✅ Fetch listings
+    const listings = await Listing.find({ userRef: req.params.id });
+
+    return res.status(200).json({
+      success: true,
+      message: "User listings fetched successfully",
+      data: listings,
+    });
+  } catch (error) {
+    console.error("Get User Listings Error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "SERVER_ERROR",
+      message: "Something went wrong while fetching listings.",
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+module.exports = {
+  uploadProfileImage,
+  updateUserInfo,
+  deleteUserAccount,
+  getUserListing,
+};
