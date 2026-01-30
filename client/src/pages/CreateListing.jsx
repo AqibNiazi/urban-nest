@@ -1,4 +1,4 @@
-import { InputField } from "@/components";
+import { Button, InputCheck, InputField, InputNumber } from "@/components";
 import React, { useState } from "react";
 import { notify } from "@/util/notify";
 import { clientBaseURL, clientEndPoints } from "@/config";
@@ -154,8 +154,7 @@ const CreateListing = () => {
             placeholder="Description"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                   focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 placeholder:text-sm
-                  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  "
             id="description"
             name="description"
             required
@@ -171,93 +170,74 @@ const CreateListing = () => {
             onChange={handleChange}
             value={formData.address}
           />
+
           <div className="flex gap-6 flex-wrap">
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="sale"
-                className="w-5"
-                onChange={handleChange}
-                checked={formData.type === "sale"}
-              />
-              <span>Sell</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="rent"
-                className="w-5"
-                onChange={handleChange}
-                checked={formData.type === "rent"}
-              />
-              <span>Rent</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="parking"
-                className="w-5"
-                onChange={handleChange}
-                checked={formData.parking}
-              />
-              <span>Parking spot</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="furnished"
-                className="w-5"
-                onChange={handleChange}
-                checked={formData.furnished}
-              />
-              <span>Furnished</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="offer"
-                className="w-5"
-                onChange={handleChange}
-                checked={formData.offer}
-              />
-              <span>Offer</span>
-            </div>
+            <InputCheck
+              type="checkbox"
+              id="sale"
+              onChange={handleChange}
+              checked={formData.type === "sale"}
+              label="Sale"
+            />
+
+            <InputCheck
+              id="rent"
+              onChange={handleChange}
+              checked={formData.type === "rent"}
+              label="Rent"
+            />
+            <InputCheck
+              id="parking"
+              onChange={handleChange}
+              checked={formData.parking}
+              label="Parking spot"
+            />
+            <InputCheck
+              id="furnished"
+              onChange={handleChange}
+              checked={formData.furnished}
+              label="Furnished"
+            />
+            <InputCheck
+              id="offer"
+              onChange={handleChange}
+              checked={formData.offer}
+              label="Offer"
+            />
           </div>
+
           <div className="flex flex-wrap gap-6">
+            <InputNumber
+              type="number"
+              id="bedrooms"
+              min="1"
+              max="10"
+              required
+              className="p-3 border border-gray-300 rounded-lg"
+              onChange={handleChange}
+              value={formData.bedrooms}
+              label="Beds"
+            />
+
+            <InputNumber
+              type="number"
+              id="bathrooms"
+              min="1"
+              max="10"
+              required
+              className="p-3 border border-gray-300 rounded-lg"
+              onChange={handleChange}
+              value={formData.bathrooms}
+              label="Baths"
+            />
+
             <div className="flex items-center gap-2">
-              <input
-                type="number"
-                id="bedrooms"
-                min="1"
-                max="10"
-                required
-                className="p-3 border border-gray-300 rounded-lg"
-                onChange={handleChange}
-                value={formData.bedrooms}
-              />
-              <p>Beds</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                id="bathrooms"
-                min="1"
-                max="10"
-                required
-                className="p-3 border border-gray-300 rounded-lg"
-                onChange={handleChange}
-                value={formData.bathrooms}
-              />
-              <p>Baths</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
+              <InputNumber
                 type="number"
                 id="regularPrice"
                 min="50"
                 max="10000000"
                 required
-                className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
                 value={formData.regularPrice}
               />
@@ -270,13 +250,12 @@ const CreateListing = () => {
             </div>
             {formData.offer && (
               <div className="flex items-center gap-2">
-                <input
+                <InputNumber
                   type="number"
                   id="discountPrice"
                   min="0"
                   max="10000000"
                   required
-                  className="p-3 border border-gray-300 rounded-lg"
                   onChange={handleChange}
                   value={formData.discountPrice}
                 />
@@ -298,11 +277,12 @@ const CreateListing = () => {
               The first image will be the cover (max 6)
             </span>
           </p>
-          <div className="flex gap-4">
+          <div className="flex items-center gap-2">
             <input
               onChange={(e) => setFiles(Array.from(e.target.files))}
-              className="p-3 border border-gray-300 rounded w-full"
               type="file"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                  focus:ring-blue-600 focus:border-blue-600 block w-full p-3.5 placeholder:text-sm"
               id="images"
               accept="image/*"
               multiple
@@ -311,7 +291,7 @@ const CreateListing = () => {
               type="button"
               disabled={uploading}
               onClick={handleImageSubmit}
-              className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80"
+              className=" text-white bg-green-600 hover:bg-green-700 py-3 px-4 rounded  hover:shadow-lg disabled:opacity-80"
             >
               {uploading ? "Uploading..." : "Upload"}
             </button>
@@ -324,17 +304,17 @@ const CreateListing = () => {
               formData.imageUrls.map((url, index) => (
                 <li
                   key={url}
-                  className="flex justify-between p-3 border items-center"
+                  className="flex justify-between p-3 border border-gray-300 rounded-xl items-center mb-4"
                 >
                   <img
                     src={url}
                     alt="listing image"
-                    className="w-20 h-20 object-contain rounded-lg"
+                    className="w-25 h-20 object-contain rounded-lg"
                   />
                   <button
                     type="button"
                     onClick={() => handleRemoveImage(index)}
-                    className="p-3 text-red-700 rounded-lg uppercase hover:opacity-75"
+                    className="p-2.5 bg-red-400 hover:bg-red-500 text-white rounded-lg uppercase hover:opacity-75"
                   >
                     Delete
                   </button>
@@ -342,12 +322,12 @@ const CreateListing = () => {
               ))}
           </ul>
 
-          <button
+          <Button
             disabled={loading || uploading}
             className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
           >
             {loading ? "Creating..." : "Create listing"}
-          </button>
+          </Button>
           {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
       </form>
