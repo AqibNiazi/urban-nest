@@ -3,7 +3,7 @@ const Listing = require("../model/listing.model");
 const createListing = async (req, res) => {
   try {
     const {
-      name,
+      title,
       description,
       address,
       regularPrice,
@@ -15,13 +15,11 @@ const createListing = async (req, res) => {
       type,
       offer,
       imageUrls,
+      userRef,
     } = req.body;
 
-    // userRef from auth middleware
-    const userRef = req.user.id;
-
     if (
-      !name ||
+      !title ||
       !description ||
       !address ||
       regularPrice === undefined ||
