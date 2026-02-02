@@ -19,14 +19,14 @@ import {
 } from "@/store/user/userSlice";
 import { clientBaseURL, clientEndPoints } from "@/config";
 import { notify } from "@/util/notify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Profile = () => {
-  const { currentUser, loading } = useSelector((state) => state.user);
-
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { currentUser, loading } = useSelector((state) => state.user);
+  const [userListings, setUserListings] = useState([]);
+  const [showListingError, setShowListingError] = useState(false);
   const [file, setFile] = useState(undefined);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0); // ✅ track percentage
@@ -76,6 +76,7 @@ const Profile = () => {
       setTimeout(() => setProgress(0), 1000);
     }
   };
+
   useEffect(() => {
     if (file) {
       handleUploadFile(file);
@@ -122,6 +123,7 @@ const Profile = () => {
       notify.error(error.response?.data?.message || "Update failed");
     }
   };
+
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
@@ -161,6 +163,20 @@ const Profile = () => {
     } catch (error) {
       dispatch(signoutUserFailure(error.message));
       notify.error(error.response?.data?.message || "Signout failed");
+    }
+  };
+
+  const handleShowListing = async () => {
+    try {
+      const response = await clientBaseURL.get(
+        `${clientEndPoints.showListing}/${currentUser.id}`,
+      );
+      if (response.data.success) {
+        setUserListings(response.data.data);
+      }
+      console.log("show listing response", response);
+    } catch (error) {
+      setShowListingError(error.response.data.message);
     }
   };
 
@@ -230,17 +246,58 @@ const Profile = () => {
           Create Listing
         </Button>
         <div className="flex justify-between">
-          <span
+          <button
             className="text-red-700 cursor-pointer"
             onClick={handleDeleteUser}
           >
             Delete Account
-          </span>
-          <span className="text-red-700 cursor-pointer" onClick={handleSignOut}>
+          </button>
+          <button
+            className="text-red-700 cursor-pointer"
+            onClick={handleSignOut}
+          >
             Sign Out
-          </span>
+          </button>
         </div>
       </form>
+      <button
+        onClick={handleShowListing}
+        type="button"
+        className="text-green-700 cursor-pointer"
+      >
+        Show Listing
+      </button>
+      <p className="text-red-600">{showListingError}</p>
+      <ul className="w-full mt-4">
+        {userListings &&
+          userListings.length > 0 &&
+          userListings.map((listing) => (
+            <li
+              key={listing._id}
+              className="w-full border border-gray-300 hover:border-gray-500 rounded-lg px-4 py-2 flex justify-between items-center gap-2 mb-4"
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  src={listing.imageUrls[0]}
+                  alt="listing cover"
+                  className="h-20 w-25 object-contain"
+                />
+              </Link>
+              <Link
+                to={`/listing/${listing._id}`}
+                className="text-slate-700 font-semibold flex-1 hover:underline truncate"
+              >
+                <p>{listing.title}</p>
+              </Link>
+              <div className="flex flex-col item-center">
+                <button className="text-red-700 uppercase">Delete</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-700 uppercase">Edit</button>
+                </Link>
+              </div>
+            </li>
+          ))}
+      </ul>
     </div>
   );
 };

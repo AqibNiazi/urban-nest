@@ -28,6 +28,7 @@ const clientEndPoints = {
 
   /// User Listing///////////////////
   createListing: `${listingBasePath}/create-listing`,
+  showListing: `${userBasePath}/user-listings`,
 };
 
 export { clientBaseURL, clientEndPoints };
