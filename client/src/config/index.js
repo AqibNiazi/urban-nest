@@ -27,7 +27,10 @@ const clientEndPoints = {
   deleteUser: `${userBasePath}/delete-user`,
 
   /// User Listing///////////////////
+  getListing: `${listingBasePath}/get-listing`,
   createListing: `${listingBasePath}/create-listing`,
+  updateListing: `${listingBasePath}/update-listing`,
+  deleteListing: `${listingBasePath}/delete-listing`,
   showListing: `${userBasePath}/user-listings`,
 };
 

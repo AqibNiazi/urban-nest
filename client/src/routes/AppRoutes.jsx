@@ -1,7 +1,15 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "@/layout/AppLayout";
-import { Home, About, SignIn, SignUp, Profile, CreateListing } from "@/pages";
+import {
+  Home,
+  About,
+  SignIn,
+  SignUp,
+  Profile,
+  CreateListing,
+  UpdateListing,
+} from "@/pages";
 import { PrivateRoute } from "@/components";
 
 const AppRoutes = () => {
@@ -32,6 +40,7 @@ const AppRoutes = () => {
           children: [
             { path: "profile", element: <Profile /> },
             { path: "create-listing", element: <CreateListing /> },
+            { path: "update-listing/:listingId", element: <UpdateListing /> },
           ],
         },
       ],
