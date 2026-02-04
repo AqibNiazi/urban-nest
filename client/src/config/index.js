@@ -25,6 +25,7 @@ const clientEndPoints = {
   uploadAvatar: `${userBasePath}/upload-avatar`,
   updateUser: `${userBasePath}/update-user`,
   deleteUser: `${userBasePath}/delete-user`,
+  getUser: `${userBasePath}/get-user`,
 
   /// User Listing///////////////////
   getListing: `${listingBasePath}/get-listing`,

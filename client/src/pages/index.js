@@ -6,7 +6,7 @@ import CreateListing from "./CreateListing";
 import About from "./About";
 import UpdateListing from "./UpdateListing";
 import Listing from "./Listing";
-import Contact from "./Contact";
+
 
 export {
   Home,
@@ -17,5 +17,4 @@ export {
   CreateListing,
   UpdateListing,
   About,
-  Contact,
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { notify } from "@/util/notify";
 import { clientBaseURL, clientEndPoints } from "@/config";
 import { useNavigate, useParams } from "react-router-dom";
-import { Contact } from "@/pages";
+import { Contact } from "@/components";
 import { Hourglass } from "react-loader-spinner";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
@@ -49,7 +49,6 @@ const Listing = () => {
     };
     fetchListing();
   }, [listingId]);
-  console.log("Listing Data", listing);
 
   return (
     <main>
@@ -161,7 +160,7 @@ const Listing = () => {
                 {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>
             </ul>
-            {currentUser && listing.userRef !== currentUser._id && !contact && (
+            {currentUser && listing.userRef !== currentUser.id && !contact && (
               <button
                 onClick={() => setContact(true)}
                 className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3"

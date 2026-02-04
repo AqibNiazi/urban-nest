@@ -5,6 +5,7 @@ import OAuth from "./OAuth";
 import PrivateRoute from "./PrivateRoute";
 import InputNumber from "./InputNumber";
 import InputCheck from "./InputCheck";
+import Contact from "./Contact";
 
 export {
   InputField,
@@ -13,5 +14,6 @@ export {
   PasswordField,
   Button,
   OAuth,
+  Contact,
   PrivateRoute,
 };

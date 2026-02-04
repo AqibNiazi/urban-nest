@@ -4,9 +4,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
-console.log("currentUser in header", currentUser);
-
-
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -38,7 +35,7 @@ console.log("currentUser in header", currentUser);
           <Link to="/profile">
             {currentUser ? (
               <img
-                src={currentUser.avatar}
+                src={currentUser?.avatar}
                 alt="profile"
                 className="rounded-full h-7 w-7 object-cover"
               />
