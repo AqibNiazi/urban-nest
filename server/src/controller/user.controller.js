@@ -206,9 +206,41 @@ const getUserListing = async (req, res) => {
     });
   }
 };
+
+const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const { password: pass, ...rest } = user._doc;
+
+    res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      data: rest,
+    });
+  } catch (error) {
+    console.error("Get User Error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "SERVER_ERROR",
+      message: "Something went wrong while fetching the user.",
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
 module.exports = {
   uploadProfileImage,
   updateUserInfo,
   deleteUserAccount,
   getUserListing,
+  getUser,
 };
