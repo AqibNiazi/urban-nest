@@ -8,9 +8,7 @@ const UpdateListing = () => {
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
   const { listingId } = useParams();
-
   const { currentUser } = useSelector((state) => state.user);
-  console.log("Current user", currentUser);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -40,7 +38,6 @@ const UpdateListing = () => {
         );
 
         if (response.data.success) {
-          notify.success(response.data.message);
           setFormData(response.data.data);
         }
       } catch (error) {

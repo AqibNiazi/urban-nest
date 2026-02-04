@@ -9,6 +9,7 @@ import {
   Profile,
   CreateListing,
   UpdateListing,
+  Listing,
 } from "@/pages";
 import { PrivateRoute } from "@/components";
 
@@ -33,6 +34,10 @@ const AppRoutes = () => {
         {
           path: "sign-up",
           element: <SignUp />,
+        },
+        {
+          path: "listing/:listingId",
+          element: <Listing />,
         },
         // Protected routes
         {
