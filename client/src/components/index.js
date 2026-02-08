@@ -6,6 +6,7 @@ import PrivateRoute from "./PrivateRoute";
 import InputNumber from "./InputNumber";
 import InputCheck from "./InputCheck";
 import Contact from "./Contact";
+import ListingItem from "./ListingItem";
 
 export {
   InputField,
@@ -16,4 +17,5 @@ export {
   OAuth,
   Contact,
   PrivateRoute,
+  ListingItem,
 };

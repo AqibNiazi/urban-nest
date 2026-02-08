@@ -29,6 +29,7 @@ const clientEndPoints = {
 
   /// User Listing///////////////////
   getListing: `${listingBasePath}/get-listing`,
+  getListings: `${listingBasePath}/get-listings`,
   createListing: `${listingBasePath}/create-listing`,
   updateListing: `${listingBasePath}/update-listing`,
   deleteListing: `${listingBasePath}/delete-listing`,
