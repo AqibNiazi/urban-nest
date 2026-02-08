@@ -10,6 +10,7 @@ import {
   CreateListing,
   UpdateListing,
   Listing,
+  Search,
 } from "@/pages";
 import { PrivateRoute } from "@/components";
 
@@ -30,6 +31,10 @@ const AppRoutes = () => {
         {
           path: "sign-in",
           element: <SignIn />,
+        },
+        {
+          path: "search",
+          element: <Search />,
         },
         {
           path: "sign-up",
