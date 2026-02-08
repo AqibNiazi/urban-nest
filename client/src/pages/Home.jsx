@@ -58,7 +58,7 @@ const Home = () => {
           place with ease
         </h1>
         <p className="text-gray-400 text-xs sm:text-sm">
-          Aqib Estate will help you find your home fast, easy and comfortable.
+          UrbanNest will help you find your home fast, easy and comfortable.
           <br />
           Our expert support are always available.
         </p>

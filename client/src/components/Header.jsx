@@ -36,9 +36,8 @@ const Header = () => {
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <Link to="/">
-          <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
-            <span className="text-slate-500 pr-2">Aqib</span>
-            <span className="text-slate-700">ESTATE</span>
+          <h1 className="font-bold text-slate-700 text-sm sm:text-xl flex flex-wrap">
+            UrbanNest
           </h1>
         </Link>
 
