@@ -8,7 +8,6 @@ const Header = () => {
   const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
-console.log("Current User in header", currentUser);
 
 const handleSubmit = (e) => {
   e.preventDefault();
