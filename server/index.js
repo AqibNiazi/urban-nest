@@ -13,7 +13,7 @@ const authRouter = require("./src/router/auth.router");
 const listingRouter = require("./src/router/listing.router");
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://urban-nest-rho.vercel.app/",
+  "https://urban-nest-rho.vercel.app",
 ];
 // Middlewares
 app.use(

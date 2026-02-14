@@ -16,7 +16,7 @@ database();
 // ✅ CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://urban-nest-rho.vercel.app/"],
+    origin: ["http://localhost:5173", "https://urban-nest-rho.vercel.app"],
     credentials: true,
   }),
 );
