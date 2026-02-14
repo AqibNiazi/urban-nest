@@ -1,12 +1,12 @@
 require("dotenv").config();
 const express = require("express");
-const database = require("./src/config/mongodb");
+const database = require("../src/config/mongodb");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-const userRouter = require("./src/router/user.router");
-const authRouter = require("./src/router/auth.router");
-const listingRouter = require("./src/router/listing.router");
+const userRouter = require("../src/router/user.router");
+const authRouter = require("../src/router/auth.router");
+const listingRouter = require("../src/router/listing.router");
 
 const app = express();
 
