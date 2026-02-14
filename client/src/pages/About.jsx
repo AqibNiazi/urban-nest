@@ -6,7 +6,7 @@ const About = () => {
       {/* Hero Section */}
       <div className="bg-slate-700 text-white py-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">UrbanNest</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Urban Nest</h1>
           <p className="text-lg text-slate-200">
             Helping you find the perfect place to call home.
           </p>
@@ -22,14 +22,14 @@ const About = () => {
               Who We Are
             </h2>
             <p className="text-gray-600 leading-relaxed">
-              UrbanNest is a modern real estate platform designed to make
+              Urban Nest is a modern real estate platform designed to make
               buying, selling, and renting properties simple, fast, and
               reliable. We believe finding a home should be an exciting journey,
               not a stressful one.
             </p>
             <p className="text-gray-600 leading-relaxed">
               Whether you are searching for a cozy apartment, a family house, or
-              an investment opportunity, UrbanNest connects you with the best
+              an investment opportunity, Urban Nest connects you with the best
               listings tailored to your needs.
             </p>
           </div>

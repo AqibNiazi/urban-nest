@@ -37,7 +37,8 @@ const Header = () => {
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <Link to="/">
           <h1 className="font-bold text-slate-700 text-sm sm:text-xl flex flex-wrap">
-            UrbanNest
+            <span className="text-slate-500 mr-1">Urban</span>
+            <span className="text-slate-700">Nest</span>
           </h1>
         </Link>
 
