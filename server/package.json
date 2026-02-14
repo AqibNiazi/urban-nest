@@ -1,11 +1,11 @@
 {
-  "name": "real-estate-server",
+  "name": "urban-nest-server",
   "version": "1.0.0",
-  "description": "RealEstate Application",
-  "main": "index.js",
+  "description": "Real Estate Application for housing in USA",
+  "main": "api/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "node api/index.js",
     "dev": "nodemon index.js"
   },
   "keywords": [
