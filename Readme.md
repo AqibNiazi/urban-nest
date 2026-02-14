@@ -7,7 +7,7 @@ It offers powerful filtering, seamless search, and a clean user experience desig
 
 ## 🌐 Live Demo
 
-🔗 **Live URL:** _Coming Soon_
+🔗 **Live URL:** https://urban-nest-rho.vercel.app/
 
 ---
 
