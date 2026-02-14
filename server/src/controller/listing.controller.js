@@ -166,6 +166,7 @@ const updateListing = async (req, res) => {
   }
 };
 
+
 const getListings = async (req, res) => {
   try {
     const limit = Math.min(parseInt(req.query.limit) || 9, 50);
@@ -227,6 +228,8 @@ const getListings = async (req, res) => {
     });
   }
 };
+
+
 
 module.exports = {
   getListing,

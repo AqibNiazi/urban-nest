@@ -123,7 +123,7 @@ const signin = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" },
+      { expiresIn: "7d" },
     );
 
     // ✅ Store token in secure cookie
@@ -194,7 +194,7 @@ const google = async (req, res) => {
       const token = jwt.sign(
         { id: user._id, email: user.email },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" },
+        { expiresIn: "7d" },
       );
 
       res.cookie("token", token, {
@@ -235,7 +235,7 @@ const google = async (req, res) => {
       const token = jwt.sign(
         { id: newUser._id, email: newUser.email },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" },
+        { expiresIn: "7d" },
       );
 
       res.cookie("token", token, {
