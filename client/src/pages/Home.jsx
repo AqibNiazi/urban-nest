@@ -18,7 +18,6 @@ const Home = () => {
         const response = await clientBaseURL(
           `${clientEndPoints.getListings}?offer=true&limit=4`,
         );
-        console.log("response", response);
 
         const data = response?.data?.data;
         setOfferListings(data);
@@ -47,7 +46,7 @@ const Home = () => {
     fetchOfferListings();
   }, []);
 
-  console.log("Offer Listing", offerListings);
+
 
   return (
     <div>
