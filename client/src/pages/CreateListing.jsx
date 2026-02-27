@@ -1,18 +1,93 @@
 import React, { useState } from "react";
-import { Button, InputCheck, InputField, InputNumber } from "@/components";
+import { InputCheck, InputField, InputNumber } from "@/components";
 import { notify } from "@/util/notify";
 import { clientBaseURL, clientEndPoints } from "@/config";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+// ── Section wrapper ──────────────────────────────────────────────────────────
+const Section = ({ step, title, description, children }) => (
+  <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-stone-100 shadow-sm shadow-stone-200/50 overflow-hidden">
+    <div className="px-6 py-4 border-b border-stone-100 flex items-center gap-3">
+      <span className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white text-xs font-bold flex items-center justify-center shadow-sm shadow-amber-200 shrink-0">
+        {step}
+      </span>
+      <div>
+        <h2 className="text-sm font-bold text-stone-800">{title}</h2>
+        {description && (
+          <p className="text-xs text-stone-400 mt-0.5">{description}</p>
+        )}
+      </div>
+    </div>
+    <div className="px-6 py-5">{children}</div>
+  </div>
+);
+
+// ── Type toggle pill ─────────────────────────────────────────────────────────
+const TypeToggle = ({ value, onChange }) => (
+  <div className="inline-flex rounded-xl border border-stone-200 bg-stone-50 p-1 gap-1">
+    {["sale", "rent"].map((t) => (
+      <button
+        key={t}
+        type="button"
+        onClick={() =>
+          onChange({ target: { id: t, type: "checkbox", checked: true } })
+        }
+        className={`px-5 py-2 text-sm font-semibold rounded-lg transition-all duration-200 capitalize
+          ${
+            value === t
+              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-200"
+              : "text-stone-500 hover:text-stone-700"
+          }`}
+      >
+        {t === "sale" ? "🏠 For Sale" : "🔑 For Rent"}
+      </button>
+    ))}
+  </div>
+);
+
+// ── Feature badge ────────────────────────────────────────────────────────────
+const FeatureBadge = ({ id, checked, onChange, label, icon }) => (
+  <button
+    type="button"
+    onClick={() =>
+      onChange({ target: { id, type: "checkbox", checked: !checked } })
+    }
+    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all duration-200 cursor-pointer
+      ${
+        checked
+          ? "bg-amber-50 border-amber-300 text-amber-700 shadow-sm shadow-amber-100"
+          : "bg-white border-stone-200 text-stone-500 hover:border-stone-300 hover:text-stone-700"
+      }`}
+  >
+    <span>{icon}</span>
+    <span>{label}</span>
+    {checked && (
+      <svg
+        className="w-3.5 h-3.5 text-amber-500 ml-0.5"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+      </svg>
+    )}
+  </button>
+);
+
+// ── Main component ───────────────────────────────────────────────────────────
 const CreateListing = () => {
-  const [files, setFiles] = useState([]);
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
+
+  // ✅ FIX: resolve _id vs id (mongoose returns _id)
+  const userId = currentUser?.id || currentUser?._id;
+
+  const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     address: "",
-    type: "sale", // default
+    type: "sale",
     parking: false,
     furnished: false,
     offer: false,
@@ -24,9 +99,12 @@ const CreateListing = () => {
   });
 
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // ── Handlers ────────────────────────────────────────────────────────────────
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -44,41 +122,12 @@ const CreateListing = () => {
     }
   };
 
-  const handleImageSubmit = async () => {
-    if (files.length === 0) {
-      setImageUploadError("Please select at least 1 image");
-      return;
-    }
-
-    if (files.length + formData.imageUrls.length > 6) {
-      setImageUploadError("You can only upload up to 6 images total");
-      return;
-    }
-
-    setUploading(true);
-    setImageUploadError(null);
-
-    try {
-      const urls = await Promise.all(files.map(storeImage));
-
-      setFormData((prev) => ({
-        ...prev,
-        imageUrls: [...prev.imageUrls, ...urls],
-      }));
-    } catch (err) {
-      setImageUploadError(err.message || "Image upload failed");
-    } finally {
-      setUploading(false);
-    }
-  };
-
   const storeImage = async (file) => {
     if (!file.type.startsWith("image/")) {
       throw new Error("Only image files are allowed");
     }
-
     if (file.size > 2 * 1024 * 1024) {
-      throw new Error("Image must be less than 2MB");
+      throw new Error(`"${file.name}" exceeds 2MB limit`);
     }
 
     const data = new FormData();
@@ -88,18 +137,51 @@ const CreateListing = () => {
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
-      {
-        method: "POST",
-        body: data,
-      },
+      { method: "POST", body: data },
     );
 
-    if (!res.ok) {
-      throw new Error("Cloudinary upload failed");
-    }
-
+    if (!res.ok) throw new Error("Cloudinary upload failed");
     const result = await res.json();
     return result.secure_url;
+  };
+
+  const handleImageSubmit = async () => {
+    if (files.length === 0) {
+      setImageUploadError("Please select at least 1 image");
+      return;
+    }
+    if (files.length + formData.imageUrls.length > 6) {
+      setImageUploadError("You can only upload up to 6 images total");
+      return;
+    }
+
+    setUploading(true);
+    setImageUploadError(null);
+    setUploadProgress(0);
+
+    try {
+      let completed = 0;
+      const urls = await Promise.all(
+        files.map(async (file) => {
+          const url = await storeImage(file);
+          completed++;
+          setUploadProgress(Math.round((completed / files.length) * 100));
+          return url;
+        }),
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        imageUrls: [...prev.imageUrls, ...urls],
+      }));
+      // ✅ FIX: Clear file selection after successful upload
+      setFiles([]);
+    } catch (err) {
+      setImageUploadError(err.message || "Image upload failed");
+    } finally {
+      setUploading(false);
+      setTimeout(() => setUploadProgress(0), 1500);
+    }
   };
 
   const handleRemoveImage = (index) => {
@@ -112,238 +194,552 @@ const CreateListing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.imageUrls.length < 1)
-      return setError("Please upload at least 1 image");
+    if (formData.imageUrls.length < 1) {
+      setError("Please upload at least 1 image");
+      return;
+    }
+    if (+formData.regularPrice < +formData.discountPrice) {
+      setError("Discount price must be less than regular price");
+      return;
+    }
 
-    if (+formData.regularPrice < +formData.discountPrice)
-      return setError("Discount price must be less than regular price");
     try {
       setLoading(true);
       setError(null);
-      const response = await clientBaseURL.post(
-        clientEndPoints.createListing, // define in config
-        { ...formData, userRef: currentUser.id },
-      );
-      console.log(response.data.data._id);
+
+      const response = await clientBaseURL.post(clientEndPoints.createListing, {
+        ...formData,
+        // ✅ FIX: userRef uses resolved userId (handles _id vs id)
+        // Note: backend should ideally use req.user.id instead, but keeping
+        // frontend fix to match your current backend
+        userRef: userId,
+      });
+
       if (response.data.success) {
         notify.success(response.data.message);
         navigate(`/listing/${response.data.data._id}`);
-        // optionally redirect or reset form
       } else {
         setError(response.data.message);
         notify.error(response.data.message);
       }
     } catch (err) {
-      setError("Failed to create listing");
-      notify.error(err.response?.data?.message || "Failed to create listing");
+      const msg = err.response?.data?.message || "Failed to create listing";
+      setError(msg);
+      notify.error(msg);
     } finally {
       setLoading(false);
     }
   };
 
+  const totalImages = formData.imageUrls.length;
+  const canUploadMore = totalImages < 6;
+
   return (
-    <main className="p-3 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">
-        Create a Listing
-      </h1>
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
-        <div className="flex flex-col gap-4 flex-1">
-          <InputField
-            type="text"
-            placeholder="Title"
-            id="title"
-            name="title"
-            maxLength="62"
-            minLength="10"
-            required
-            onChange={handleChange}
-            value={formData.title}
-          />
-          <textarea
-            type="text"
-            placeholder="Description"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                  focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 placeholder:text-sm"
-            id="description"
-            name="description"
-            required
-            onChange={handleChange}
-            value={formData.description}
-          />
-          <InputField
-            type="text"
-            placeholder="Address"
-            name="address"
-            id="address"
-            required
-            onChange={handleChange}
-            value={formData.address}
-          />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-stone-50 to-amber-50/40 py-10 px-4">
+      {/* Ambient blobs */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
+        <div className="absolute -top-40 -right-32 w-80 h-80 rounded-full bg-amber-100/50 blur-3xl" />
+        <div className="absolute -bottom-40 -left-32 w-80 h-80 rounded-full bg-orange-100/40 blur-3xl" />
+        <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full bg-stone-100/60 blur-3xl" />
+      </div>
 
-          <div className="flex gap-6 flex-wrap">
-            <InputCheck
-              id="sale"
-              onChange={handleChange}
-              checked={formData.type === "sale"}
-              label="Sale"
-            />
-            <InputCheck
-              id="rent"
-              onChange={handleChange}
-              checked={formData.type === "rent"}
-              label="Rent"
-            />
-            <InputCheck
-              id="parking"
-              onChange={handleChange}
-              checked={formData.parking}
-              label="Parking spot"
-            />
-            <InputCheck
-              id="furnished"
-              onChange={handleChange}
-              checked={formData.furnished}
-              label="Furnished"
-            />
-            <InputCheck
-              id="offer"
-              onChange={handleChange}
-              checked={formData.offer}
-              label="Offer"
-            />
-          </div>
-
-          <div className="flex flex-wrap gap-6">
-            <InputNumber
-              type="number"
-              id="bedrooms"
-              min="1"
-              max="10"
-              required
-              onChange={handleChange}
-              value={formData.bedrooms}
-              label="Beds"
-            />
-
-            <InputNumber
-              type="number"
-              id="bathrooms"
-              min="1"
-              max="10"
-              required
-              onChange={handleChange}
-              value={formData.bathrooms}
-              label="Baths"
-            />
-
-            <div className="flex items-center gap-2">
-              <InputNumber
-                type="number"
-                id="regularPrice"
-                min="50"
-                max="10000000"
-                required
-                onChange={handleChange}
-                value={formData.regularPrice}
-              />
-              <div className="flex flex-col items-center">
-                <p>Regular price</p>
-                {formData.type === "rent" && (
-                  <span className="text-xs">($ / month)</span>
-                )}
-              </div>
+      <div className="max-w-5xl mx-auto">
+        {/* Page header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-200">
+              <svg
+                className="w-4 h-4 text-white"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+              </svg>
             </div>
-            {formData.offer && (
-              <div className="flex items-center gap-2">
-                <InputNumber
-                  type="number"
-                  id="discountPrice"
-                  min="0"
-                  max="10000000"
-                  required
-                  onChange={handleChange}
-                  value={formData.discountPrice}
-                />
-                <div className="flex flex-col items-center">
-                  <p>Discounted price</p>
-
-                  {formData.type === "rent" && (
-                    <span className="text-xs">($ / month)</span>
-                  )}
-                </div>
-              </div>
-            )}
+            <span className="text-sm font-bold text-amber-600 tracking-wide uppercase">
+              New Listing
+            </span>
           </div>
+          <h1 className="text-3xl font-bold text-stone-800 tracking-tight">
+            Create a Listing
+          </h1>
+          <p className="text-stone-500 mt-1.5 text-sm">
+            Fill in the details below to list your property on UrbanNest
+          </p>
         </div>
 
-        <div className="flex flex-col flex-1 gap-4">
-          <p className="font-semibold">
-            Images:
-            <span className="font-normal text-gray-600 ml-2">
-              The first image will be the cover (max 6)
-            </span>
-          </p>
-          <div className="flex items-center gap-2">
-            <input
-              onChange={(e) => setFiles(Array.from(e.target.files))}
-              type="file"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                  focus:ring-blue-600 focus:border-blue-600 block w-full p-3.5 placeholder:text-sm"
-              id="images"
-              accept="image/*"
-              multiple
-            />
-            <button
-              type="button"
-              disabled={uploading}
-              onClick={handleImageSubmit}
-              className=" text-white bg-green-600 hover:bg-green-700 py-3 px-4 rounded  hover:shadow-lg disabled:opacity-80"
-            >
-              {uploading ? "Uploading..." : "Upload"}
-            </button>
-          </div>
-          <p className="text-red-700 text-sm">
-            {imageUploadError && imageUploadError}
-          </p>
-          <ul>
-            {formData.imageUrls.length > 0 &&
-              formData.imageUrls.map((url, index) => (
-                <li
-                  key={url}
-                  className="flex justify-between p-3 border border-gray-300 rounded-xl items-center mb-4"
-                >
-                  <img
-                    src={url}
-                    alt="listing image"
-                    className="w-25 h-20 object-contain rounded-lg"
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            {/* ── Left column (3/5) ── */}
+            <div className="lg:col-span-3 space-y-5">
+              {/* Basic Info */}
+              <Section
+                step="1"
+                title="Property Details"
+                description="Basic information about your listing"
+              >
+                <div className="space-y-4">
+                  <InputField
+                    labeltext="Listing Title"
+                    labelfor="title"
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="e.g. Modern Downtown Apartment"
+                    maxLength="62"
+                    minLength="10"
+                    required
+                    onChange={handleChange}
+                    value={formData.title}
                   />
+
+                  <div>
+                    <label className="block mb-1.5 text-sm font-semibold text-stone-700">
+                      Description
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      required
+                      onChange={handleChange}
+                      value={formData.description}
+                      rows={4}
+                      placeholder="Describe your property — highlights, nearby amenities, unique features…"
+                      className="w-full bg-stone-50 border border-stone-200 text-stone-800 text-sm
+                                 rounded-xl px-4 py-3 resize-none
+                                 placeholder:text-stone-400
+                                 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400
+                                 hover:border-stone-300 transition-all duration-200"
+                    />
+                  </div>
+
+                  <InputField
+                    labeltext="Address"
+                    labelfor="address"
+                    type="text"
+                    id="address"
+                    name="address"
+                    placeholder="e.g. 123 Main St, New York, NY"
+                    required
+                    onChange={handleChange}
+                    value={formData.address}
+                  />
+                </div>
+              </Section>
+
+              {/* Listing Type */}
+              <Section
+                step="2"
+                title="Listing Type"
+                description="Is this property for sale or rent?"
+              >
+                <TypeToggle value={formData.type} onChange={handleChange} />
+              </Section>
+
+              {/* Features */}
+              <Section
+                step="3"
+                title="Features & Amenities"
+                description="Select all that apply"
+              >
+                <div className="flex flex-wrap gap-2.5">
+                  <FeatureBadge
+                    id="parking"
+                    checked={formData.parking}
+                    onChange={handleChange}
+                    label="Parking"
+                    icon="🚗"
+                  />
+                  <FeatureBadge
+                    id="furnished"
+                    checked={formData.furnished}
+                    onChange={handleChange}
+                    label="Furnished"
+                    icon="🛋️"
+                  />
+                  <FeatureBadge
+                    id="offer"
+                    checked={formData.offer}
+                    onChange={handleChange}
+                    label="Special Offer"
+                    icon="🏷️"
+                  />
+                </div>
+              </Section>
+
+              {/* Rooms & Pricing */}
+              <Section
+                step="4"
+                title="Rooms & Pricing"
+                description="Set capacity and price details"
+              >
+                <div className="space-y-5">
+                  {/* Beds & Baths */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block mb-1.5 text-sm font-semibold text-stone-700">
+                        Bedrooms
+                      </label>
+                      <InputNumber
+                        id="bedrooms"
+                        min="1"
+                        max="10"
+                        required
+                        onChange={handleChange}
+                        value={formData.bedrooms}
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-1.5 text-sm font-semibold text-stone-700">
+                        Bathrooms
+                      </label>
+                      <InputNumber
+                        id="bathrooms"
+                        min="1"
+                        max="10"
+                        required
+                        onChange={handleChange}
+                        value={formData.bathrooms}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Pricing */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block mb-1.5 text-sm font-semibold text-stone-700">
+                        Regular Price
+                        {formData.type === "rent" && (
+                          <span className="text-xs font-normal text-stone-400 ml-1.5">
+                            ($ / month)
+                          </span>
+                        )}
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-sm font-medium">
+                          $
+                        </span>
+                        <input
+                          type="number"
+                          id="regularPrice"
+                          min="50"
+                          max="10000000"
+                          required
+                          onChange={handleChange}
+                          value={formData.regularPrice}
+                          className="w-full bg-stone-50 border border-stone-200 text-stone-800 text-sm
+                                     rounded-xl pl-7 pr-4 py-2.5
+                                     focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400
+                                     hover:border-stone-300 transition-all duration-200"
+                        />
+                      </div>
+                    </div>
+
+                    {formData.offer && (
+                      <div>
+                        <label className="block mb-1.5 text-sm font-semibold text-stone-700">
+                          Discounted Price
+                          {formData.type === "rent" && (
+                            <span className="text-xs font-normal text-stone-400 ml-1.5">
+                              ($ / month)
+                            </span>
+                          )}
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-sm font-medium">
+                            $
+                          </span>
+                          <input
+                            type="number"
+                            id="discountPrice"
+                            min="0"
+                            max="10000000"
+                            required
+                            onChange={handleChange}
+                            value={formData.discountPrice}
+                            className="w-full bg-stone-50 border border-stone-200 text-stone-800 text-sm
+                                       rounded-xl pl-7 pr-4 py-2.5
+                                       focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400
+                                       hover:border-stone-300 transition-all duration-200"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Price hint */}
+                  {formData.offer &&
+                    +formData.discountPrice >= +formData.regularPrice && (
+                      <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl px-3 py-2.5">
+                        <svg
+                          className="w-4 h-4 shrink-0"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                        </svg>
+                        Discount price must be less than regular price
+                      </div>
+                    )}
+                </div>
+              </Section>
+            </div>
+
+            {/* ── Right column (2/5) ── */}
+            <div className="lg:col-span-2 space-y-5">
+              {/* Image upload */}
+              <Section
+                step="5"
+                title="Property Photos"
+                description={`${totalImages}/6 uploaded · First image is the cover`}
+              >
+                <div className="space-y-4">
+                  {/* Drop zone */}
+                  <label
+                    htmlFor="images"
+                    className={`flex flex-col items-center justify-center gap-2 w-full border-2 border-dashed rounded-2xl py-8 cursor-pointer transition-all duration-200
+                      ${
+                        canUploadMore
+                          ? "border-stone-300 hover:border-amber-400 hover:bg-amber-50/50 bg-stone-50"
+                          : "border-stone-200 bg-stone-50 opacity-50 cursor-not-allowed"
+                      }`}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center">
+                      <svg
+                        className="w-5 h-5 text-stone-400"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                      </svg>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-semibold text-stone-700">
+                        {files.length > 0
+                          ? `${files.length} file${files.length > 1 ? "s" : ""} selected`
+                          : "Choose photos"}
+                      </p>
+                      <p className="text-xs text-stone-400 mt-0.5">
+                        PNG, JPG, WEBP · Max 2MB each
+                      </p>
+                    </div>
+                    <input
+                      id="images"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      disabled={!canUploadMore}
+                      onChange={(e) => {
+                        setFiles(Array.from(e.target.files));
+                        setImageUploadError(null);
+                      }}
+                      className="hidden"
+                    />
+                  </label>
+
+                  {/* Upload button */}
                   <button
                     type="button"
-                    onClick={() => handleRemoveImage(index)}
-                    className="p-2.5 bg-red-400 hover:bg-red-500 text-white rounded-lg uppercase hover:opacity-75"
+                    disabled={uploading || files.length === 0 || !canUploadMore}
+                    onClick={handleImageSubmit}
+                    className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold
+                               bg-stone-800 hover:bg-stone-900 text-white rounded-xl
+                               shadow-md shadow-stone-200 hover:shadow-stone-300
+                               transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0
+                               disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
-                    Delete
+                    {uploading ? (
+                      <>
+                        <svg
+                          className="w-4 h-4 animate-spin"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                        >
+                          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                        </svg>
+                        Uploading {uploadProgress}%
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          className="w-4 h-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <polyline points="17 8 12 3 7 8" />
+                          <line x1="12" y1="3" x2="12" y2="15" />
+                          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                        </svg>
+                        Upload Photos
+                      </>
+                    )}
                   </button>
-                </li>
-              ))}
-          </ul>
 
-          <Button
-            disabled={loading || uploading}
-            className={`uppercase
-              ${
-                loading || uploading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-slate-700 hover:bg-slate-800"
-              } 
-              transition-colors duration-200`}
-          >
-            {loading ? "Creating..." : "Create listing"}
-          </Button>
-          {error && <p className="text-red-700 text-sm">{error}</p>}
-        </div>
-      </form>
-    </main>
+                  {/* Upload progress bar */}
+                  {uploading && (
+                    <div className="w-full bg-stone-200 rounded-full h-1.5">
+                      <div
+                        className="bg-gradient-to-r from-amber-400 to-orange-400 h-1.5 rounded-full transition-all duration-300"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  )}
+
+                  {/* Upload error */}
+                  {imageUploadError && (
+                    <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl px-3 py-2.5">
+                      <svg
+                        className="w-4 h-4 shrink-0"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                      </svg>
+                      {imageUploadError}
+                    </div>
+                  )}
+
+                  {/* Image preview grid */}
+                  {formData.imageUrls.length > 0 && (
+                    <div className="grid grid-cols-2 gap-2 mt-1">
+                      {formData.imageUrls.map((url, index) => (
+                        <div
+                          key={url}
+                          className="relative group rounded-xl overflow-hidden aspect-video border border-stone-200"
+                        >
+                          <img
+                            src={url}
+                            alt={`listing ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          {/* Cover badge */}
+                          {index === 0 && (
+                            <span className="absolute top-1.5 left-1.5 text-xs bg-amber-500 text-white px-1.5 py-0.5 rounded-md font-semibold">
+                              Cover
+                            </span>
+                          )}
+                          {/* Remove button */}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(index)}
+                            className="absolute top-1.5 right-1.5 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full
+                                       opacity-0 group-hover:opacity-100 transition-opacity duration-150
+                                       flex items-center justify-center shadow-md"
+                          >
+                            <svg
+                              className="w-3 h-3"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                            >
+                              <line x1="18" y1="6" x2="6" y2="18" />
+                              <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Section>
+
+              {/* Submit */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-stone-100 shadow-sm p-6 space-y-3">
+                {/* Summary */}
+                <div className="flex items-center justify-between text-xs text-stone-500 pb-3 border-b border-stone-100">
+                  <span>Photos uploaded</span>
+                  <span
+                    className={`font-semibold ${totalImages > 0 ? "text-amber-600" : "text-stone-400"}`}
+                  >
+                    {totalImages} / 6
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-stone-500 pb-3 border-b border-stone-100">
+                  <span>Listing type</span>
+                  <span className="font-semibold text-stone-700 capitalize">
+                    {formData.type}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-stone-500 pb-4 border-b border-stone-100">
+                  <span>Regular price</span>
+                  <span className="font-semibold text-stone-700">
+                    {formData.regularPrice > 0
+                      ? `$${Number(formData.regularPrice).toLocaleString()}`
+                      : "—"}
+                    {formData.type === "rent" && formData.regularPrice > 0 && (
+                      <span className="font-normal text-stone-400"> /mo</span>
+                    )}
+                  </span>
+                </div>
+
+                {/* Global error */}
+                {error && (
+                  <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl px-3 py-2.5">
+                    <svg
+                      className="w-4 h-4 shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                    </svg>
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading || uploading}
+                  className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white
+                             bg-gradient-to-r from-amber-500 to-orange-500
+                             hover:from-amber-600 hover:to-orange-600
+                             rounded-xl shadow-lg shadow-amber-200 hover:shadow-amber-300
+                             transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0
+                             disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {loading ? (
+                    <>
+                      <svg
+                        className="w-4 h-4 animate-spin"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                      >
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                      </svg>
+                      Publishing…
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className="w-4 h-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M22 2L11 13" />
+                        <path d="M22 2L15 22l-4-9-9-4 20-7z" />
+                      </svg>
+                      Publish Listing
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 
