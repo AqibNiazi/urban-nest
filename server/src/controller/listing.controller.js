@@ -34,8 +34,6 @@ const createListing = async (req, res) => {
       imageUrls,
     } = req.body;
 
-    // ✅ FIX: Use req.user.id from verified JWT — never trust userRef from client body
-    // This prevents any user from creating listings on behalf of another user
     const userRef = req.user.id;
 
     if (
@@ -73,7 +71,7 @@ const createListing = async (req, res) => {
       type,
       offer,
       imageUrls,
-      userRef, // ✅ From JWT, not from req.body
+      userRef,
     });
 
     return res.status(201).json({
@@ -102,7 +100,6 @@ const deleteListing = async (req, res) => {
       });
     }
 
-    // ✅ Compare as strings to handle any ObjectId vs String mismatch
     if (req.user.id !== listing.userRef.toString()) {
       return res.status(401).json({
         success: false,
@@ -140,7 +137,6 @@ const updateListing = async (req, res) => {
       });
     }
 
-    // ✅ Compare as strings
     if (req.user.id !== listing.userRef.toString()) {
       return res.status(401).json({
         success: false,
@@ -177,27 +173,18 @@ const getListings = async (req, res) => {
     const limit = Math.min(parseInt(req.query.limit) || 9, 50);
     const startIndex = parseInt(req.query.startIndex) || 0;
 
-    const offer =
-      req.query.offer === "true"
-        ? true
-        : req.query.offer === "false"
-          ? false
-          : { $in: [true, false] };
+    // ✅ FIX: Only filter by boolean fields when explicitly set to "true"
+    // If param is absent OR "false" → use { $in: [true, false] } to show ALL listings
+    // This matches frontend behaviour where unchecked = "don't filter"
+    const offer = req.query.offer === "true" ? true : { $in: [true, false] };
 
     const furnished =
-      req.query.furnished === "true"
-        ? true
-        : req.query.furnished === "false"
-          ? false
-          : { $in: [true, false] };
+      req.query.furnished === "true" ? true : { $in: [true, false] };
 
     const parking =
-      req.query.parking === "true"
-        ? true
-        : req.query.parking === "false"
-          ? false
-          : { $in: [true, false] };
+      req.query.parking === "true" ? true : { $in: [true, false] };
 
+    // Type: only filter if explicitly "sale" or "rent", otherwise show both
     const type =
       req.query.type === "sale" || req.query.type === "rent"
         ? req.query.type
