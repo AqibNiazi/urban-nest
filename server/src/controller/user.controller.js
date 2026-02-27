@@ -2,6 +2,7 @@ const cloudinary = require("../config/cloudinary");
 const User = require("../model/user.model");
 const bcrypt = require("bcryptjs");
 const Listing = require("../model/listing.model");
+
 const uploadProfileImage = async (req, res) => {
   try {
     if (!req.file) {
@@ -11,7 +12,6 @@ const uploadProfileImage = async (req, res) => {
       });
     }
 
-    // Wrap Cloudinary stream in a Promise
     const result = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         {
@@ -25,21 +25,25 @@ const uploadProfileImage = async (req, res) => {
           else resolve(result);
         },
       );
-
-      stream.end(req.file.buffer); // ✅ send buffer directly
+      stream.end(req.file.buffer);
     });
 
-    // Update user avatar in MongoDB
     const user = await User.findByIdAndUpdate(
       req.user.id,
       { avatar: result.secure_url },
       { new: true },
     );
 
+    // ✅ FIX: Return sanitized user object — no password, consistent id field
     return res.status(200).json({
       success: true,
       message: "Profile image uploaded successfully",
-      data: user,
+      data: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar,
+      },
     });
   } catch (error) {
     console.error("Cloudinary Upload Error:", error);
@@ -53,7 +57,6 @@ const uploadProfileImage = async (req, res) => {
 
 const updateUserInfo = async (req, res) => {
   try {
-    // ✅ Ensure user can only update their own account
     if (req.user.id !== req.params.id) {
       return res.status(401).json({
         success: false,
@@ -62,8 +65,6 @@ const updateUserInfo = async (req, res) => {
     }
 
     const { username, email, password, avatar } = req.body;
-
-    // ✅ Build update object dynamically
     const updateData = {};
 
     if (username) {
@@ -108,7 +109,6 @@ const updateUserInfo = async (req, res) => {
       updateData.avatar = avatar;
     }
 
-    // ✅ If no fields provided, just return current user
     if (Object.keys(updateData).length === 0) {
       const user = await User.findById(req.params.id);
       return res.status(200).json({
@@ -123,13 +123,13 @@ const updateUserInfo = async (req, res) => {
       });
     }
 
-    // ✅ Update user in MongoDB
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       { $set: updateData },
       { new: true },
     );
 
+    // ✅ Consistent sanitized response
     return res.status(200).json({
       success: true,
       message: "User updated successfully",
@@ -178,7 +178,6 @@ const deleteUserAccount = async (req, res) => {
 
 const getUserListing = async (req, res) => {
   try {
-    // ✅ Ensure user can only view their own listings
     if (req.user.id !== req.params.id) {
       return res.status(401).json({
         success: false,
@@ -187,7 +186,6 @@ const getUserListing = async (req, res) => {
       });
     }
 
-    // ✅ Fetch listings
     const listings = await Listing.find({ userRef: req.params.id });
 
     return res.status(200).json({
