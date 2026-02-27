@@ -32,8 +32,11 @@ const createListing = async (req, res) => {
       type,
       offer,
       imageUrls,
-      userRef,
     } = req.body;
+
+    // ✅ FIX: Use req.user.id from verified JWT — never trust userRef from client body
+    // This prevents any user from creating listings on behalf of another user
+    const userRef = req.user.id;
 
     if (
       !title ||
@@ -58,12 +61,19 @@ const createListing = async (req, res) => {
     }
 
     const listing = await Listing.create({
-      ...req.body,
+      title,
+      description,
+      address,
       regularPrice: Number(regularPrice),
       discountPrice: offer ? Number(discountPrice) : 0,
       bedrooms: Number(bedrooms),
       bathrooms: Number(bathrooms),
-      userRef,
+      furnished,
+      parking,
+      type,
+      offer,
+      imageUrls,
+      userRef, // ✅ From JWT, not from req.body
     });
 
     return res.status(201).json({
@@ -83,7 +93,6 @@ const createListing = async (req, res) => {
 
 const deleteListing = async (req, res) => {
   try {
-    // ✅ Check if listing exists
     const listing = await Listing.findById(req.params.id);
     if (!listing) {
       return res.status(404).json({
@@ -93,8 +102,8 @@ const deleteListing = async (req, res) => {
       });
     }
 
-    // ✅ Ensure user owns the listing
-    if (req.user.id !== listing.userRef) {
+    // ✅ Compare as strings to handle any ObjectId vs String mismatch
+    if (req.user.id !== listing.userRef.toString()) {
       return res.status(401).json({
         success: false,
         error: "UNAUTHORIZED",
@@ -102,7 +111,6 @@ const deleteListing = async (req, res) => {
       });
     }
 
-    // ✅ Delete listing
     await Listing.findByIdAndDelete(req.params.id);
 
     return res.status(200).json({
@@ -123,7 +131,6 @@ const deleteListing = async (req, res) => {
 
 const updateListing = async (req, res) => {
   try {
-    // ✅ Check if listing exists
     const listing = await Listing.findById(req.params.id);
     if (!listing) {
       return res.status(404).json({
@@ -133,8 +140,8 @@ const updateListing = async (req, res) => {
       });
     }
 
-    // ✅ Ensure user owns the listing
-    if (req.user.id !== listing.userRef) {
+    // ✅ Compare as strings
+    if (req.user.id !== listing.userRef.toString()) {
       return res.status(401).json({
         success: false,
         error: "UNAUTHORIZED",
@@ -142,7 +149,6 @@ const updateListing = async (req, res) => {
       });
     }
 
-    // ✅ Update listing
     const updatedListing = await Listing.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -166,13 +172,11 @@ const updateListing = async (req, res) => {
   }
 };
 
-
 const getListings = async (req, res) => {
   try {
     const limit = Math.min(parseInt(req.query.limit) || 9, 50);
     const startIndex = parseInt(req.query.startIndex) || 0;
 
-    // Convert string query params to booleans safely
     const offer =
       req.query.offer === "true"
         ? true
@@ -200,7 +204,6 @@ const getListings = async (req, res) => {
         : { $in: ["sale", "rent"] };
 
     const searchTerm = req.query.searchTerm || "";
-
     const sortField = req.query.sort || "createdAt";
     const sortOrder = req.query.order === "asc" ? 1 : -1;
 
@@ -228,8 +231,6 @@ const getListings = async (req, res) => {
     });
   }
 };
-
-
 
 module.exports = {
   getListing,
