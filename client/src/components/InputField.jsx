@@ -11,13 +11,12 @@ const InputField = ({
   onChange,
   placeholder,
   className,
-
 }) => {
   return (
     <div className={className}>
       <label
         htmlFor={labelfor}
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        className="block mb-1.5 text-sm font-semibold text-stone-700"
       >
         {labeltext}
       </label>
@@ -29,8 +28,12 @@ const InputField = ({
         defaultValue={defaultValue}
         onChange={onChange}
         placeholder={placeholder}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                  focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 placeholder:text-sm"
+        className="w-full bg-stone-50 border border-stone-200 text-stone-800 text-sm 
+                   rounded-xl px-4 py-2.5 
+                   placeholder:text-stone-400 placeholder:text-sm
+                   focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400
+                   hover:border-stone-300
+                   transition-all duration-200"
         required
       />
     </div>

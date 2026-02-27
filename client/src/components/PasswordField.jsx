@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁️ eye icons
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 const PasswordField = ({
   labelfor,
   labeltext,
@@ -7,36 +8,49 @@ const PasswordField = ({
   id,
   value,
   onChange,
+  placeholder,
   required,
 }) => {
-  const [showPassword, setShowPassword] = useState(false); // 👁️ toggle state
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
-    <div className="relative mb-4">
+    <div>
       <label
         htmlFor={labelfor}
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        className="block mb-1.5 text-sm font-semibold text-stone-700"
       >
         {labeltext}
       </label>
-      <input
-        type={showPassword ? "text" : "password"}
-        name={name}
-        id={id}
-        value={value}
-        onChange={onChange}
-        placeholder="••••••••"
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                    focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 
-                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required={required}
-      />
-      <span
-        onClick={() => setShowPassword(!showPassword)}
-        className="absolute right-3 top-10 cursor-pointer text-gray-500"
-      >
-        {showPassword ? <FaEyeSlash /> : <FaEye />}
-      </span>
+      <div className="relative">
+        <input
+          type={showPassword ? "text" : "password"}
+          name={name}
+          id={id}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder || "••••••••"}
+          className="w-full bg-stone-50 border border-stone-200 text-stone-800 text-sm 
+                     rounded-xl px-4 py-2.5 pr-11
+                     placeholder:text-stone-400
+                     focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400
+                     hover:border-stone-300
+                     transition-all duration-200"
+          required={required}
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 
+                     hover:text-stone-600 transition-colors duration-150 p-0.5"
+          aria-label={showPassword ? "Hide password" : "Show password"}
+        >
+          {showPassword ? (
+            <FaEyeSlash className="w-4 h-4" />
+          ) : (
+            <FaEye className="w-4 h-4" />
+          )}
+        </button>
+      </div>
     </div>
   );
 };
