@@ -13,6 +13,12 @@ import TypeToggle from "./TypeToggle";
 import SubmitPanel from "./SubmitPanel";
 import FeatureBadge from "./FeatureBadge";
 import ImageUploadSection from "./ImageUploadSection";
+
+//  Search Filter Components
+import FilterChip from "./Search/FilterChip";
+import ListingCard from "./Search/ListingCard";
+
+
 export {
   InputField,
   InputNumber,
@@ -29,4 +35,7 @@ export {
   SubmitPanel,
   FeatureBadge,
   ImageUploadSection,
+  // Search components export
+  FilterChip,
+  ListingCard
 };
