@@ -29,7 +29,7 @@ const StatCard = ({ value, suffix, label, icon, started }) => {
   );
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-stone-100 shadow-sm p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400/20 to-orange-500/20 flex items-center justify-center mx-auto mb-4 text-2xl">
+      <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-amber-400/20 to-orange-500/20 flex items-center justify-center mx-auto mb-4 text-2xl">
         {icon}
       </div>
       <p className="text-3xl font-black text-stone-800 tracking-tight">
@@ -46,9 +46,9 @@ const ValueCard = ({ icon, title, desc, accent }) => (
   <div
     className={`relative overflow-hidden bg-white/80 backdrop-blur-sm rounded-2xl border shadow-sm p-7 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ${accent}`}
   >
-    <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 opacity-60" />
+    <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-linear-to-br from-amber-100 to-orange-100 opacity-60" />
     <div className="relative z-10">
-      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-5 text-2xl shadow-md shadow-amber-200">
+      <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-5 text-2xl shadow-md shadow-amber-200">
         {icon}
       </div>
       <h3 className="text-lg font-bold text-stone-800 mb-2">{title}</h3>
@@ -73,7 +73,7 @@ const About = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-stone-50 to-amber-50/30">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-stone-50 to-amber-50/30">
       {/* Ambient blobs */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
         <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-amber-100/40 blur-3xl" />
@@ -82,7 +82,7 @@ const About = () => {
 
       {/* ── Hero ── */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900" />
+        <div className="absolute inset-0 bg-linear-to-br from-stone-900 via-stone-800 to-stone-900" />
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -91,7 +91,7 @@ const About = () => {
             backgroundSize: "44px 44px",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-orange-500/10" />
+        <div className="absolute inset-0 bg-linear-to-r from-amber-500/10 via-transparent to-orange-500/10" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-24 text-center">
           <div className="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/30 text-amber-400 rounded-full px-4 py-1.5 mb-7">
@@ -103,7 +103,7 @@ const About = () => {
           <h1 className="text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight mb-5">
             Reimagining the way
             <br />
-            <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
               people find home
             </span>
           </h1>
@@ -119,7 +119,7 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-5">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
+              <div className="w-1 h-4 rounded-full bg-linear-to-b from-amber-400 to-orange-500" />
               <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">
                 Who We Are
               </span>
@@ -143,7 +143,7 @@ const About = () => {
               <Link
                 to="/search"
                 className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white
-                           bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl
+                           bg-linear-to-r from-amber-500 to-orange-500 rounded-xl
                            shadow-md shadow-amber-200 hover:shadow-amber-300
                            transition-all duration-200 hover:-translate-y-0.5"
               >
@@ -171,18 +171,18 @@ const About = () => {
 
           {/* Image panel */}
           <div className="relative">
-            <div className="rounded-3xl overflow-hidden shadow-2xl shadow-stone-300/40 border border-white ring-1 ring-stone-200/40 aspect-[4/3]">
+            <div className="rounded-3xl overflow-hidden shadow-2xl shadow-stone-300/40 border border-white ring-1 ring-stone-200/40 aspect-4/3">
               <img
                 src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&auto=format&fit=crop"
                 alt="Modern property"
                 className="w-full h-full object-cover"
               />
               {/* gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/30 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-stone-900/30 to-transparent" />
             </div>
             {/* Floating tag */}
             <div className="absolute -bottom-5 -right-5 bg-white rounded-2xl shadow-xl border border-stone-100 px-4 py-3 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-200 text-white shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-200 text-white shrink-0">
                 🏙️
               </div>
               <div>
@@ -196,7 +196,7 @@ const About = () => {
 
       {/* ── Mission ── */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="bg-gradient-to-r from-stone-900 to-stone-800 rounded-3xl p-10 relative overflow-hidden">
+        <div className="bg-linear-to-r from-stone-900 to-stone-800 rounded-3xl p-10 relative overflow-hidden">
           <div
             className="absolute inset-0 opacity-[0.04]"
             style={{
@@ -228,11 +228,11 @@ const About = () => {
       <section ref={statsRef} className="max-w-5xl mx-auto px-4 py-12">
         <div className="text-center mb-10">
           <div className="flex items-center justify-center gap-2 mb-1.5">
-            <div className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
+            <div className="w-1 h-4 rounded-full bg-linear-to-b from-amber-400 to-orange-500" />
             <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">
               By The Numbers
             </span>
-            <div className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
+            <div className="w-1 h-4 rounded-full bg-linear-to-b from-amber-400 to-orange-500" />
           </div>
           <h2 className="text-2xl font-black text-stone-800 tracking-tight">
             Urban Nest at a glance
@@ -274,11 +274,11 @@ const About = () => {
       <section className="max-w-5xl mx-auto px-4 py-12">
         <div className="text-center mb-10">
           <div className="flex items-center justify-center gap-2 mb-1.5">
-            <div className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
+            <div className="w-1 h-4 rounded-full bg-linear-to-b from-amber-400 to-orange-500" />
             <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">
               Core Values
             </span>
-            <div className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
+            <div className="w-1 h-4 rounded-full bg-linear-to-b from-amber-400 to-orange-500" />
           </div>
           <h2 className="text-2xl font-black text-stone-800 tracking-tight">
             What drives us every day
@@ -331,7 +331,7 @@ const About = () => {
             {["🧑‍💼", "👩‍💼", "🧑‍🔧", "👩‍🎨"].map((e, i) => (
               <div
                 key={i}
-                className="w-12 h-12 rounded-full bg-gradient-to-br from-stone-100 to-amber-50 border-2 border-white shadow-md flex items-center justify-center text-xl"
+                className="w-12 h-12 rounded-full bg-linear-to-br from-stone-100 to-amber-50 border-2 border-white shadow-md flex items-center justify-center text-xl"
               >
                 {e}
               </div>
@@ -347,7 +347,7 @@ const About = () => {
           <Link
             to="/search"
             className="inline-flex items-center gap-2 px-8 py-3.5 text-sm font-bold text-white
-                       bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl
+                       bg-linear-to-r from-amber-500 to-orange-500 rounded-xl
                        shadow-lg shadow-amber-200 hover:shadow-amber-300
                        transition-all duration-200 hover:-translate-y-0.5"
           >

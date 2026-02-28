@@ -230,7 +230,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-stone-50 to-amber-50/40 py-10 px-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-stone-50 to-amber-50/40 py-10 px-4">
       {/* Ambient blobs */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
         <div className="absolute -top-40 -right-32 w-80 h-80 rounded-full bg-amber-100/50 blur-3xl" />
@@ -241,7 +241,7 @@ const Profile = () => {
         {/* ── Profile Card ── */}
         <div className="bg-white/85 backdrop-blur-md rounded-3xl shadow-xl shadow-stone-200/50 border border-white/60 overflow-hidden">
           {/* Top accent bar */}
-          <div className="h-1.5 bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
+          <div className="h-1.5 bg-linear-to-r from-amber-400 via-orange-400 to-rose-400" />
 
           <div className="px-8 py-8">
             {/* Header */}
@@ -296,7 +296,7 @@ const Profile = () => {
                     </div>
                     <div className="w-full bg-stone-200 rounded-full h-1.5">
                       <div
-                        className="bg-gradient-to-r from-amber-400 to-orange-400 h-1.5 rounded-full transition-all duration-300"
+                        className="bg-linear-to-r from-amber-400 to-orange-400 h-1.5 rounded-full transition-all duration-300"
                         style={{ width: `${progress}%` }}
                       />
                     </div>
@@ -348,7 +348,7 @@ const Profile = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-200 hover:shadow-amber-300 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-200 hover:shadow-amber-300 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -435,7 +435,7 @@ const Profile = () => {
 
         {/* ── Listings Card ── */}
         <div className="bg-white/85 backdrop-blur-md rounded-3xl shadow-xl shadow-stone-200/50 border border-white/60 overflow-hidden">
-          <div className="h-1.5 bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
+          <div className="h-1.5 bg-linear-to-r from-amber-400 via-orange-400 to-rose-400" />
 
           <div className="px-8 py-6">
             <div className="flex items-center justify-between mb-4">

@@ -54,7 +54,7 @@ const SignIn = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-stone-50 to-amber-50/40 px-4 py-12">
+    <section className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 via-stone-50 to-amber-50/40 px-4 py-12">
       {/* Ambient background blobs */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
         <div className="absolute -top-40 -right-32 w-80 h-80 rounded-full bg-amber-100/50 blur-3xl" />
@@ -66,12 +66,12 @@ const SignIn = () => {
         {/* Card */}
         <div className="bg-white/85 backdrop-blur-md rounded-3xl shadow-2xl shadow-stone-300/40 border border-white/60 overflow-hidden">
           {/* Gradient top bar */}
-          <div className="h-1.5 bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
+          <div className="h-1.5 bg-linear-to-r from-amber-400 via-orange-400 to-rose-400" />
 
           <div className="px-8 py-10">
             {/* Logo */}
             <div className="flex items-center justify-center gap-2.5 mb-8">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-200">
+              <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-200">
                 <svg
                   className="w-5 h-5 text-white"
                   viewBox="0 0 24 24"
@@ -148,7 +148,7 @@ const SignIn = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-200 hover:shadow-amber-300 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 mt-2"
+                className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-200 hover:shadow-amber-300 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 mt-2"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

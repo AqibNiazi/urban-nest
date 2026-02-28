@@ -47,7 +47,7 @@ const Footer = () => {
       />
 
       {/* Amber glow top edge */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-linear-to-r from-transparent via-amber-500/50 to-transparent" />
 
       {/* Ambient blobs */}
       <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-amber-500/5 blur-3xl pointer-events-none" />
@@ -59,7 +59,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-2 space-y-5">
             <Link to="/" className="flex items-center gap-2.5 w-fit">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-900/40">
+              <div className="w-9 h-9 rounded-xl bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-900/40">
                 <svg
                   className="w-5 h-5 text-white"
                   viewBox="0 0 24 24"
@@ -176,7 +176,7 @@ const Footer = () => {
               />
               <button
                 className="px-4 py-2.5 text-sm font-bold text-white
-                           bg-gradient-to-r from-amber-500 to-orange-500
+                           bg-linear-to-r from-amber-500 to-orange-500
                            hover:from-amber-400 hover:to-orange-400
                            rounded-xl shadow-md shadow-amber-900/30 transition-all duration-200
                            hover:-translate-y-0.5 whitespace-nowrap"
@@ -195,13 +195,13 @@ const Footer = () => {
           <div className="flex items-center gap-5">
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
               (item) => (
-                <a
+                <Link
                   key={item}
-                  href="#"
+                  to="#"
                   className="text-xs text-stone-500 hover:text-stone-300 transition-colors duration-150"
                 >
                   {item}
-                </a>
+                </Link>
               ),
             )}
           </div>
