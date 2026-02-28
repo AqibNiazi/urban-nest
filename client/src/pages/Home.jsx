@@ -4,72 +4,9 @@ import { clientBaseURL, clientEndPoints } from "@/config";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination, EffectFade } from "swiper/modules";
 import "swiper/css/bundle";
+import "swiper/css/effect-fade";
 import { ListingCard } from "@/components";
-
-// ── Reusable Section Header ───────────────────────────────────────────────────
-const SectionHeader = ({ tag, title, linkTo, linkLabel }) => (
-  <div className="flex items-end justify-between mb-7">
-    <div>
-      <div className="flex items-center gap-2 mb-1.5">
-        <div className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
-        <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">
-          {tag}
-        </span>
-      </div>
-      <h2 className="text-2xl font-bold text-stone-800 tracking-tight">
-        {title}
-      </h2>
-    </div>
-    <Link
-      to={linkTo}
-      className="flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700
-                 bg-amber-50 hover:bg-amber-100 border border-amber-200 hover:border-amber-300
-                 px-3.5 py-2 rounded-xl transition-all duration-150 group"
-    >
-      {linkLabel}
-      <svg
-        className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
-        <path d="M5 12h14M12 5l7 7-7 7" />
-      </svg>
-    </Link>
-  </div>
-);
-
-// ── Stat item ─────────────────────────────────────────────────────────────────
-const Stat = ({ value, label }) => (
-  <div className="text-center px-6">
-    <p className="text-2xl font-black text-stone-800">{value}</p>
-    <p className="text-xs text-stone-500 mt-0.5 font-medium">{label}</p>
-  </div>
-);
-
-// ── Skeleton loader for listing grid ─────────────────────────────────────────
-const ListingGridSkeleton = ({ count = 4 }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-    {[...Array(count)].map((_, i) => (
-      <div
-        key={i}
-        className="bg-white rounded-2xl border border-stone-100 overflow-hidden animate-pulse"
-      >
-        <div className="aspect-video bg-stone-200" />
-        <div className="p-4 space-y-2.5">
-          <div className="h-4 bg-stone-200 rounded-lg w-3/4" />
-          <div className="h-3 bg-stone-100 rounded-lg w-1/2" />
-          <div className="flex gap-2 mt-3">
-            <div className="h-3 bg-stone-200 rounded w-16" />
-            <div className="h-3 bg-stone-200 rounded w-16" />
-          </div>
-          <div className="h-5 bg-amber-100 rounded-lg w-1/3 mt-1" />
-        </div>
-      </div>
-    ))}
-  </div>
-);
+import { ListingGridSkeleton, SectionHeader, Stat } from "@/components/Home";
 
 const Home = () => {
   const [offerListings, setOfferListings] = useState([]);
@@ -102,7 +39,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-stone-50 to-amber-50/30">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-stone-50 to-amber-50/30">
       {/* ── Ambient blobs ── */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
         <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-amber-100/40 blur-3xl" />
@@ -126,14 +63,14 @@ const Home = () => {
               <h1 className="text-4xl lg:text-[52px] font-black text-stone-800 tracking-tight leading-[1.1]">
                 Find your next{" "}
                 <span className="relative inline-block">
-                  <span className="relative z-10 bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
+                  <span className="relative z-10 bg-linear-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
                     perfect
                   </span>
-                  <span className="absolute -bottom-0.5 left-0 right-0 h-2 bg-amber-200/60 rounded-sm -z-0" />
+                  <span className="absolute -bottom-0.5 left-0 right-0 h-2 bg-amber-200/60 rounded-sm z-0" />
                 </span>{" "}
                 place with ease
               </h1>
-              <p className="text-stone-500 text-base leading-relaxed max-w-[420px]">
+              <p className="text-stone-500 text-base leading-relaxed max-w-105">
                 Urban Nest connects you with verified properties across the
                 city's most sought-after neighbourhoods — fast, simple, and
                 stress-free.
@@ -144,7 +81,7 @@ const Home = () => {
               <Link
                 to="/search"
                 className="flex items-center gap-2 px-6 py-3 text-sm font-bold text-white
-                           bg-gradient-to-r from-amber-500 to-orange-500
+                           bg-linear-to-r from-amber-500 to-orange-500
                            rounded-xl shadow-lg shadow-amber-200/80
                            hover:from-amber-600 hover:to-orange-600 hover:shadow-amber-300/80
                            transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
@@ -185,7 +122,7 @@ const Home = () => {
           <div className="relative lg:ml-4">
             <div className="rounded-3xl overflow-hidden shadow-2xl shadow-stone-300/50 border border-white ring-1 ring-stone-200/60">
               {loading ? (
-                <div className="aspect-[4/3] bg-gradient-to-br from-stone-200 via-stone-100 to-amber-50 animate-pulse flex items-center justify-center">
+                <div className="aspect-4/3 bg-linear-to-br from-stone-200 via-stone-100 to-amber-50 animate-pulse flex items-center justify-center">
                   <div className="flex flex-col items-center gap-3 text-stone-300">
                     <svg
                       className="w-12 h-12"
@@ -204,12 +141,15 @@ const Home = () => {
                 </div>
               ) : offerListings.length > 0 ? (
                 <Swiper
-                  modules={[Navigation, Autoplay, Pagination]}
+                  modules={[Navigation, Autoplay, Pagination, EffectFade]}
+                  effect="fade"
+                  fadeEffect={{ crossFade: true }}
                   navigation
                   autoplay={{ delay: 4500, disableOnInteraction: false }}
                   pagination={{ clickable: true }}
                   loop
-                  className="aspect-[4/3]"
+                  speed={1000}
+                  className="aspect-4/3"
                 >
                   {offerListings.map((listing) => (
                     <SwiperSlide key={listing._id}>
@@ -218,13 +158,13 @@ const Home = () => {
                         className="block w-full h-full"
                       >
                         <div
-                          className="w-full h-full min-h-[300px]"
+                          className="w-full h-full min-h-75"
                           style={{
                             background: `url(${listing?.imageUrls?.[0]}) center/cover no-repeat`,
                           }}
                         >
                           {/* Caption overlay */}
-                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-5">
+                          <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-5">
                             <p className="text-white font-bold text-sm truncate">
                               {listing.title}
                             </p>
@@ -242,7 +182,7 @@ const Home = () => {
                   ))}
                 </Swiper>
               ) : (
-                <div className="aspect-[4/3] bg-gradient-to-br from-amber-50 to-stone-50 flex items-center justify-center">
+                <div className="aspect-4/3 bg-linear-to-br from-amber-50 to-stone-50 flex items-center justify-center">
                   <p className="text-stone-400 text-sm">
                     No featured listings yet
                   </p>
@@ -252,7 +192,7 @@ const Home = () => {
 
             {/* Floating badge — bottom left */}
             <div className="absolute -bottom-5 -left-5 bg-white rounded-2xl shadow-xl shadow-stone-200/70 border border-stone-100 px-4 py-3 flex items-center gap-3 z-10">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-200 shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-200 shrink-0">
                 <svg
                   className="w-5 h-5 text-white"
                   viewBox="0 0 24 24"
@@ -389,7 +329,7 @@ const Home = () => {
         {/* CTA Banner */}
         <section className="relative overflow-hidden rounded-3xl">
           {/* Dark background with grid overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900" />
+          <div className="absolute inset-0 bg-linear-to-br from-stone-900 via-stone-800 to-stone-900" />
           <div
             className="absolute inset-0 opacity-[0.04]"
             style={{
@@ -398,7 +338,7 @@ const Home = () => {
               backgroundSize: "40px 40px",
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-orange-500/10" />
+          <div className="absolute inset-0 bg-linear-to-r from-amber-500/10 via-transparent to-orange-500/10" />
 
           <div className="relative z-10 px-8 py-14 text-center">
             <span
@@ -420,7 +360,7 @@ const Home = () => {
               <Link
                 to="/create-listing"
                 className="inline-flex items-center gap-2 px-8 py-3.5 text-sm font-bold
-                           bg-gradient-to-r from-amber-500 to-orange-500 text-white
+                           bg-linear-to-r from-amber-500 to-orange-500 text-white
                            rounded-xl shadow-lg shadow-amber-900/40
                            hover:from-amber-400 hover:to-orange-400 hover:shadow-amber-900/60
                            transition-all duration-200 hover:-translate-y-0.5"
