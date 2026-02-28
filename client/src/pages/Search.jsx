@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { clientBaseURL, clientEndPoints } from "@/config";
-import { FilterChip, ListingCard } from "@/components";
+import { FilterChip, ListingCard } from "@/components/Search";
 
 export default function Search() {
   const navigate = useNavigate();
@@ -217,7 +217,7 @@ export default function Search() {
       <button
         type="submit"
         className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-white
-                   bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600
+                   bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600
                    rounded-xl shadow-md shadow-amber-200 hover:shadow-amber-300
                    transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
       >
@@ -237,7 +237,7 @@ export default function Search() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-stone-50 to-amber-50/40">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-stone-50 to-amber-50/40">
       <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
         <div className="absolute -top-40 -right-32 w-80 h-80 rounded-full bg-amber-100/40 blur-3xl" />
         <div className="absolute -bottom-40 -left-32 w-80 h-80 rounded-full bg-orange-100/30 blur-3xl" />

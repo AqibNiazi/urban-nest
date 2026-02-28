@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination, EffectFade } from "swiper/modules";
 import "swiper/css/bundle";
 import "swiper/css/effect-fade";
-import { ListingCard } from "@/components";
+import { ListingCard } from "@/components/Search";
 import { ListingGridSkeleton, SectionHeader, Stat } from "@/components/Home";
 
 const Home = () => {
