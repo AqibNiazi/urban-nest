@@ -7,6 +7,7 @@ import About from "./About";
 import UpdateListing from "./UpdateListing";
 import Listing from "./Listing";
 import Search from "./Search";
+import ForgotPassword from "./ForgotPassword";
 
 export {
   Home,
@@ -18,4 +19,5 @@ export {
   UpdateListing,
   About,
   Search,
+  ForgotPassword,
 };

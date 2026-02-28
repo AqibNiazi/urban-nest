@@ -11,6 +11,7 @@ import {
   UpdateListing,
   Listing,
   Search,
+  ForgotPassword,
 } from "@/pages";
 import { PrivateRoute } from "@/components";
 
@@ -33,13 +34,18 @@ const AppRoutes = () => {
           element: <SignIn />,
         },
         {
-          path: "search",
-          element: <Search />,
-        },
-        {
           path: "sign-up",
           element: <SignUp />,
         },
+        {
+          path: "forgot-password",
+          element: <ForgotPassword />,
+        },
+        {
+          path: "search",
+          element: <Search />,
+        },
+
         {
           path: "listing/:listingId",
           element: <Listing />,
