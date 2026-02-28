@@ -2,7 +2,6 @@ const bcrypt = require("bcryptjs");
 const User = require("../model/user.model");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 const transporter = require("../config/nodemailer");
 const signup = async (req, res) => {
   try {
@@ -283,39 +282,6 @@ const signout = async (req, res) => {
   }
 };
 
-// auth.controller.js
-// Add these two functions to your existing auth.controller.js
-// ─────────────────────────────────────────────────────────────────────────────
-// Required at top of file (add to your existing requires):
-//
-//   const crypto    = require("crypto");
-//   const nodemailer = require("nodemailer");
-//   const bcrypt    = require("bcryptjs"); // already used for signup/signin
-//   const User      = require("../models/user.model"); // already used
-//
-// ─────────────────────────────────────────────────────────────────────────────
-// Required .env variables:
-//
-//   SMTP_HOST=smtp.gmail.com            # or your SMTP host
-//   SMTP_PORT=587
-//   SMTP_USER=your@gmail.com
-//   SMTP_PASS=your-app-password          # Gmail App Password (not your real password)
-//   CLIENT_URL=http://localhost:5173      # frontend origin, for reset link
-//
-// ─────────────────────────────────────────────────────────────────────────────
-
-// ─── Nodemailer transporter ───────────────────────────────────────────────────
-// const createTransporter = () =>
-//   nodemailer.createTransport({
-//     host: process.env.SMTP_HOST || "smtp.gmail.com",
-//     port: Number(process.env.SMTP_PORT) || 587,
-//     secure: process.env.SMTP_SECURE === "true",
-//     auth: {
-//       user: process.env.SMTP_USER,
-//       pass: process.env.SMTP_PASS,
-//     },
-//   });
-
 // ─── POST /api/auth/forgot-password ──────────────────────────────────────────
 // Body: { email }
 // - Generates a secure random token (32 bytes hex)
@@ -487,20 +453,7 @@ const resetPassword = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// HOW TO INTEGRATE INTO YOUR EXISTING auth.controller.js:
-//
-// 1. Add to the top requires:
-//      const crypto     = require("crypto");
-//      const nodemailer = require("nodemailer");
-//
-// 2. Copy the createTransporter(), forgotPassword(), and resetPassword()
-//    functions above into your existing auth.controller.js
-//
-// 3. Add to the module.exports at the bottom:
-//      module.exports = { signup, signin, google, signout, forgotPassword, resetPassword };
-//
-// ─────────────────────────────────────────────────────────────────────────────
+
 
 module.exports = {
   signup,
