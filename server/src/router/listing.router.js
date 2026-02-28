@@ -6,7 +6,7 @@ const {
   updateListing,
   getListings,
 } = require("../controller/listing.controller");
-const { verifyToken } = require("../middleware/auth");
+const { verifyToken } = require("../middleware/auth.middleware");
 
 const listingRouter = express.Router();
 listingRouter.get("/get-listings", getListings);

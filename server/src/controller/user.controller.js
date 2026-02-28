@@ -1,6 +1,6 @@
+const bcrypt = require("bcryptjs");
 const cloudinary = require("../config/cloudinary");
 const User = require("../model/user.model");
-const bcrypt = require("bcryptjs");
 const Listing = require("../model/listing.model");
 
 const uploadProfileImage = async (req, res) => {

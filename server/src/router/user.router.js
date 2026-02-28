@@ -9,8 +9,8 @@ const {
   getUserListing,
   getUser,
 } = require("../controller/user.controller");
-const upload = require("../middleware/upload");
-const { verifyToken } = require("../middleware/auth"); // your JWT middleware
+const upload = require("../middleware/upload.middleware");
+const { verifyToken } = require("../middleware/auth.middleware"); // your JWT middleware
 
 userRouter.post(
   "/upload-avatar",
