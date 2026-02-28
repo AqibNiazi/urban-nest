@@ -1,78 +1,10 @@
 import React, { useState } from "react";
-import { InputCheck, InputField, InputNumber } from "@/components";
+import { InputField, InputNumber } from "@/components";
 import { notify } from "@/util/notify";
 import { clientBaseURL, clientEndPoints } from "@/config";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-// ── Section wrapper ──────────────────────────────────────────────────────────
-const Section = ({ step, title, description, children }) => (
-  <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-stone-100 shadow-sm shadow-stone-200/50 overflow-hidden">
-    <div className="px-6 py-4 border-b border-stone-100 flex items-center gap-3">
-      <span className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white text-xs font-bold flex items-center justify-center shadow-sm shadow-amber-200 shrink-0">
-        {step}
-      </span>
-      <div>
-        <h2 className="text-sm font-bold text-stone-800">{title}</h2>
-        {description && (
-          <p className="text-xs text-stone-400 mt-0.5">{description}</p>
-        )}
-      </div>
-    </div>
-    <div className="px-6 py-5">{children}</div>
-  </div>
-);
-
-// ── Type toggle pill ─────────────────────────────────────────────────────────
-const TypeToggle = ({ value, onChange }) => (
-  <div className="inline-flex rounded-xl border border-stone-200 bg-stone-50 p-1 gap-1">
-    {["sale", "rent"].map((t) => (
-      <button
-        key={t}
-        type="button"
-        onClick={() =>
-          onChange({ target: { id: t, type: "checkbox", checked: true } })
-        }
-        className={`px-5 py-2 text-sm font-semibold rounded-lg transition-all duration-200 capitalize
-          ${
-            value === t
-              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-200"
-              : "text-stone-500 hover:text-stone-700"
-          }`}
-      >
-        {t === "sale" ? "🏠 For Sale" : "🔑 For Rent"}
-      </button>
-    ))}
-  </div>
-);
-
-// ── Feature badge ────────────────────────────────────────────────────────────
-const FeatureBadge = ({ id, checked, onChange, label, icon }) => (
-  <button
-    type="button"
-    onClick={() =>
-      onChange({ target: { id, type: "checkbox", checked: !checked } })
-    }
-    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all duration-200 cursor-pointer
-      ${
-        checked
-          ? "bg-amber-50 border-amber-300 text-amber-700 shadow-sm shadow-amber-100"
-          : "bg-white border-stone-200 text-stone-500 hover:border-stone-300 hover:text-stone-700"
-      }`}
-  >
-    <span>{icon}</span>
-    <span>{label}</span>
-    {checked && (
-      <svg
-        className="w-3.5 h-3.5 text-amber-500 ml-0.5"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-      </svg>
-    )}
-  </button>
-);
+import { Section, TypeToggle, FeatureBadge } from "@/components/Listing";
 
 // ── Main component ───────────────────────────────────────────────────────────
 const CreateListing = () => {
@@ -235,7 +167,7 @@ const CreateListing = () => {
   const canUploadMore = totalImages < 6;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-stone-50 to-amber-50/40 py-10 px-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-stone-50 to-amber-50/40 py-10 px-4">
       {/* Ambient blobs */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
         <div className="absolute -top-40 -right-32 w-80 h-80 rounded-full bg-amber-100/50 blur-3xl" />
@@ -247,7 +179,7 @@ const CreateListing = () => {
         {/* Page header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-200">
+            <div className="w-8 h-8 rounded-xl bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-200">
               <svg
                 className="w-4 h-4 text-white"
                 viewBox="0 0 24 24"
@@ -587,7 +519,7 @@ const CreateListing = () => {
                   {uploading && (
                     <div className="w-full bg-stone-200 rounded-full h-1.5">
                       <div
-                        className="bg-gradient-to-r from-amber-400 to-orange-400 h-1.5 rounded-full transition-all duration-300"
+                        className="bg-linear-to-r from-amber-400 to-orange-400 h-1.5 rounded-full transition-all duration-300"
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
@@ -699,7 +631,7 @@ const CreateListing = () => {
                   type="submit"
                   disabled={loading || uploading}
                   className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white
-                             bg-gradient-to-r from-amber-500 to-orange-500
+                             bg-linear-to-r from-amber-500 to-orange-500
                              hover:from-amber-600 hover:to-orange-600
                              rounded-xl shadow-lg shadow-amber-200 hover:shadow-amber-300
                              transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0

@@ -1,5 +1,5 @@
 // ── Image upload section ─────────────────────────────────────────────────────
-import { Section } from "@/components";
+import Section from "./Section";
 const ImageUploadSection = ({
   step,
   imageUrls,

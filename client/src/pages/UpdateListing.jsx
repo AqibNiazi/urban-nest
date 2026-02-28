@@ -11,7 +11,7 @@ import {
   FeatureBadge,
   ImageUploadSection,
   SubmitPanel,
-} from "@/components";
+} from "@/components/Listing";
 
 const UpdateListing = () => {
   const navigate = useNavigate();
@@ -159,7 +159,7 @@ const UpdateListing = () => {
   // ── Loading skeleton ─────────────────────────────────────────────────────
   if (fetchLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-stone-50 to-amber-50/40 py-10 px-4 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-stone-50 to-amber-50/40 py-10 px-4 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3 text-stone-400">
           <svg
             className="w-8 h-8 animate-spin"
@@ -177,7 +177,7 @@ const UpdateListing = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-stone-50 to-amber-50/40 py-10 px-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-stone-50 to-amber-50/40 py-10 px-4">
       <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
         <div className="absolute -top-40 -right-32 w-80 h-80 rounded-full bg-amber-100/50 blur-3xl" />
         <div className="absolute -bottom-40 -left-32 w-80 h-80 rounded-full bg-orange-100/40 blur-3xl" />
@@ -187,7 +187,7 @@ const UpdateListing = () => {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-200">
+            <div className="w-8 h-8 rounded-xl bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-200">
               <svg
                 className="w-4 h-4 text-white"
                 viewBox="0 0 24 24"
