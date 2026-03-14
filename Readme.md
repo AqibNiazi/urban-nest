@@ -12,7 +12,6 @@
 
 </div>
 
----
 
 ## 📌 Table of Contents
 
@@ -27,7 +26,6 @@
 - [Deployment](#-deployment)
 - [Contributing](#-contributing)
 
----
 
 ## 🧭 Overview
 
@@ -42,53 +40,46 @@ UrbanNest is a production-grade real estate marketplace where users can browse p
 | 🎨 UI | Tailwind CSS 4, Swiper carousels, skeleton loaders, amber gradient system |
 | 📱 Responsive | Mobile, tablet, and desktop |
 
----
 
 ## 📸 Screenshots
 
 ### 🏡 Home Page
 > Animated hero, Swiper carousel with featured listings, stats bar, and CTA sections.
 
-![Home Page](docs/screenshots/home.png)
+![Home Page](screenshots/home.png)
 
----
 
 ### 🔐 Sign In & Sign Up
 
-![Sign In](docs/screenshots/signin.png)
-![Sign Up](docs/screenshots/signup.png)
+![Sign In](screenshots/signin.png)
+![Sign Up](screenshots/signup.png)
 
----
 
 ### 🔑 Forgot Password
 > Three-step flow — enter email → check inbox → set new password.
 
 | Step 1 | Step 2 | Step 3 |
 |--------|--------|--------|
-| ![Step 1](docs/screenshots/forgot-step1.png) | ![Step 2](docs/screenshots/forgot-step2.png) | ![Step 3](docs/screenshots/forgot-step3.png) | ![Step 4](docs/screenshots/forgot-step4.png) |
+| ![Step 1](screenshots/forgot-step1.png) | ![Step 2](screenshots/forgot-step2.png) | ![Step 3](screenshots/forgot-step3.png) | ![Step 4](screenshots/forgot-step4.png) |
 
----
 
 ### 🔎 Search & Listings
 
-![Search Page](docs/screenshots/search.png)
-![Listing Detail](docs/screenshots/listing.png)
+![Search Page](screenshots/search.png)
+![Listing Detail](screenshots/listing.png)
 
----
 
 ### ➕ Create & Edit Listing
 
-![Create Listing](docs/screenshots/create-listing.png)
-![Update Listing](docs/screenshots/update-listing.png)
+![Create Listing](screenshots/create-listing.png)
+![Update Listing](screenshots/update-listing.png)
 
----
 
 ### 👤 Profile & About
 
-![Profile Page](docs/screenshots/profile.png)
-![About Page](docs/screenshots/about.png)
+![Profile Page](screenshots/profile.png)
+![About Page](screenshots/about.png)
 
----
 
 ## ⚙️ How It Works
 
@@ -123,7 +114,6 @@ POST /api/auth/reset-password   ──▶  SHA-256(rawToken) matched  ──▶ 
 bcrypt.hash(newPassword)  ──▶  saved  ──▶  token fields cleared
 ```
 
----
 
 ## 🛠️ Tech Stack
 
@@ -131,11 +121,11 @@ bcrypt.hash(newPassword)  ──▶  saved  ──▶  token fields cleared
 
 | Technology | Purpose |
 |---|---|
-| React 18 | UI library |
+| React 19 | UI library |
 | Vite | Build tool & dev server |
 | Tailwind CSS 4 | Utility-first styling |
 | Redux Toolkit + Persist | Global state + persistence |
-| React Router v6 | Client-side routing |
+| React Router v7 | Client-side routing |
 | Axios | HTTP client with credentials |
 | Swiper.js | Touch-ready carousels |
 | React Toastify | Toast notifications |
@@ -152,7 +142,6 @@ bcrypt.hash(newPassword)  ──▶  saved  ──▶  token fields cleared
 | Cloudinary | Image hosting & CDN |
 | Firebase Admin | Google OAuth verification |
 
----
 
 ## 📁 Project Structure
 
@@ -186,7 +175,6 @@ urban-nest/
 └── README.md
 ```
 
----
 
 ## 🚀 Getting Started
 
@@ -199,7 +187,6 @@ npm -v    # v9+
 
 You also need accounts at [MongoDB Atlas](https://mongodb.com/atlas), [Firebase](https://console.firebase.google.com), and [Cloudinary](https://cloudinary.com).
 
----
 
 ### 1. Clone the repo
 
@@ -240,7 +227,6 @@ cd server && npm run dev
 cd client && npm run dev
 ```
 
----
 
 ## 🔑 Environment Variables
 
@@ -272,7 +258,6 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
 VITE_FIREBASE_APP_ID=1:123456789:web:abc123
 ```
 
----
 
 ## 📡 API Reference
 
@@ -311,7 +296,6 @@ Base URL (production): `https://urban-nest-api.vercel.app`
 
 **Search query params:** `searchTerm` · `type` · `offer` · `parking` · `furnished` · `sort` · `order` · `startIndex` · `limit`
 
----
 
 ## ☁️ Deployment
 
@@ -329,7 +313,6 @@ Both services deploy to **Vercel**.
 - [ ] Add your Vercel domain to Firebase Authorized Domains
 - [ ] Set JWT cookie `secure: true`, `sameSite: 'none'`
 
----
 
 ## 🤝 Contributing
 
@@ -339,21 +322,18 @@ Both services deploy to **Vercel**.
 4. Push — `git push origin feature/your-feature`
 5. Open a Pull Request
 
----
 
 ## 👨‍💻 Author
 
 **Your Name**
 
-[![GitHub](https://img.shields.io/badge/GitHub-your--username-181717?style=flat&logo=github)](https://github.com/AqibNiazi)
+[![GitHub](https://img.shields.io/badge/GitHub-AqibNiazi-181717?style=flat&logo=github)](https://github.com/AqibNiazi)
 
----
 
 ## 📄 License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
----
 
 <div align="center">
 
